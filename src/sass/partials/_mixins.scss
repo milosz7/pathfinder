@@ -1,0 +1,7 @@
+@mixin text-format($size: 1rem, $spacing: 0, $weight: 400) {
+  font-size: $size;
+  font-weight: $weight;
+  letter-spacing: $spacing-unit * $spacing;
+  text-indent: $spacing-unit * $spacing;
+  margin: 0 $spacing-unit * $spacing * -1;
+}
