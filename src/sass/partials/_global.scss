@@ -42,3 +42,11 @@ button {
   margin: 0 auto;
   padding-inline: $gutter * 2;
 }
+
+section {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
