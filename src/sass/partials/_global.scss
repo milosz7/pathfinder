@@ -1,0 +1,44 @@
+*, 
+*::before, 
+*::after {
+  box-sizing: border-box;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+li {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  font-family: $font-main;
+  color: $clr-light;
+  background-color: $clr-dark;
+  background-image: url('../../images/background.jpg');
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+  background-size: 100% 100vh;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-inline: $gutter * 2;
+}
