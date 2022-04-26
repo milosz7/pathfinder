@@ -1,0 +1,25 @@
+.section__title {
+  @include text-format(2rem, 2, 700);
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: $gutter * 4;
+}
+
+.pathfinder-grid {
+  outline: 2px solid $clr-light;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 auto $gutter * 2;
+  width: 500px;
+  height: 500px;
+}
+
+.grid-element {
+  flex-basis: 10%;
+  border: 2px solid $clr-light;
+
+  &.active {
+    background-color: $clr-primary;
+  }
+}
