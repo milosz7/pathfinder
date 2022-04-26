@@ -14,6 +14,8 @@ export const select = {
   pathfinder: {
     element: '.grid-element',
     elementActive: '.active',
+    controlsButton: '.pathfinder-controls',
+    messageTitle: '.pathfinder-message',
   },
 };
 
@@ -36,5 +38,20 @@ export const settings = {
     coordinateLimitDefault: 9,
     testPathID: 'testPath',
     routeID: 'route',
-  }
+    minPathLength: 3,
+  },
+  textContent: {
+    drawing: {
+      title: 'Draw routes',
+      btnText: 'Finish Drawing',
+    },
+    pickCells: {
+      title: 'Pick start and finish',
+      btnText: 'Compute',
+    },
+    result: {
+      title: 'The best route is...',
+      btnText: 'Start again',
+    },
+  },
 };
