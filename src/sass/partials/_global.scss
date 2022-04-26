@@ -51,3 +51,14 @@ section {
     display: block;
   }
 }
+
+.btn-primary {
+  @include text-format(1rem, 0.5, 700);
+  padding: $gutter * 0.5 $gutter * 1.5;
+  display: flex;
+  background : $clr-primary;
+  color: $clr-light;
+  text-transform: uppercase;
+  margin: 0 auto;
+  border: 0;
+}
