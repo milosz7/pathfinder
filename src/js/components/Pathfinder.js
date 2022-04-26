@@ -6,6 +6,7 @@ class Pathfinder {
     thisPathfinder.wrapper = wrapper;
     thisPathfinder.route = [];
     thisPathfinder.createElements();
+    thisPathfinder.getElements();
     thisPathfinder.initActions();
     console.log(thisPathfinder);
   }
@@ -163,6 +164,27 @@ class Pathfinder {
         thisPathfinder.selectPath(e.target.closest(select.pathfinder.element));
       }
     });
+    thisPathfinder.controlsButton.addEventListener('click', function() {
+      thisPathfinder.finishDrawing();
+    });
+  }
+
+  getElements() {
+    const thisPathfinder = this;
+    thisPathfinder.controlsButton = document.querySelector(select.pathfinder.controlsButton);
+    thisPathfinder.titleMessage = document.querySelector(select.pathfinder.messageTitle);
+  }
+
+  finishDrawing() {
+    const thisPathfinder = this;
+    const path = thisPathfinder.route;
+    if (path.length >= settings.pathfinder.minPathLength) {
+      const oldWrapper = thisPathfinder.wrapper;
+      const newWrapper = oldWrapper.cloneNode(true);
+      oldWrapper.parentNode.replaceChild(newWrapper, oldWrapper);
+      thisPathfinder.controlsButton.innerHTML = settings.textContent.pickCells.btnText;
+      thisPathfinder.titleMessage.innerHTML = settings.textContent.pickCells.title;
+    }
   }
 }
 
