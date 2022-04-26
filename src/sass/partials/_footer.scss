@@ -4,6 +4,5 @@
 }
 
 .footer__copyright {
-  font-size: 0.8rem;
-  letter-spacing: $spacing-unit;
+  @include text-format(0.8rem, 1);
 }

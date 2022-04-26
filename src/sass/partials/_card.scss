@@ -54,14 +54,10 @@
 }
 
 .content__title {
+  @include text-format(2rem, 2, 700);
   text-transform: uppercase;
-  letter-spacing: $spacing-unit * 2;
-  font-weight: 700;
-  font-size: 2rem;
 }
 
 .content__subtitle {
-  letter-spacing: $spacing-unit * 1.5;
-  font-weight: 400;
-  font-size: 1.25rem;
+  @include text-format(1.25rem, 1.5, 400);
 }

@@ -8,21 +8,13 @@
 }
 
 .logo-title {
-  font-weight: 800;
+  @include text-format(4rem, 20, 800);
   text-transform: uppercase;
-  font-size: 5rem;
-  letter-spacing: $spacing-unit * 20;
-  text-indent: $spacing-unit * 20;
-  margin: 0 $spacing-unit * -20;
   text-align: center;
 }
 
 .logo-subtitle {
+  @include text-format(1.5rem, 4, 700);
   text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: $spacing-unit * 4;
-  text-indent: $spacing-unit * 4;
-  margin: 0 -$spacing-unit * 4;
-  font-size: 1.5rem;
   text-align: right;
 }
