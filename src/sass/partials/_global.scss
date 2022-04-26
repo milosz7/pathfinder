@@ -45,6 +45,7 @@ button {
 
 section {
   display: none;
+  padding-block: $gutter * 2;
 
   &.active {
     display: block;
