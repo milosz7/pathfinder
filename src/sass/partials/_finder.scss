@@ -21,5 +21,9 @@
 
   &.active {
     background-color: $clr-primary;
+
+    &.start-end {
+      background-color: darken($clr-primary, 20%);
+    }
   }
 }
