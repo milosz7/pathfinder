@@ -60,11 +60,11 @@ class Pathfinder {
         return true;
       }
     } else {
-      path.splice(thisPathfinder.getIndex(posX, posY), 1);
       const testPath = (thisPathfinder.testPath = []);
       const routeID = settings.pathfinder.routeID;
       const testPathID = settings.pathfinder.testPathID;
       const notIncluded = !thisPathfinder.testIndex(coordinates[0], coordinates[1], testPathID);
+      path.splice(thisPathfinder.getIndex(posX, posY, routeID), 1);  
       for (let coordinates of path) {
         if (testPath.length === 0) {
           testPath.push(coordinates);
@@ -116,9 +116,9 @@ class Pathfinder {
     }
   }
 
-  getIndex(posX, posY) {
+  getIndex(posX, posY, pathArr) {
     const thisPathfinder = this;
-    const path = thisPathfinder.route;
+    const path = thisPathfinder[pathArr];
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
         return path.indexOf(routeCoordinates);
@@ -159,13 +159,14 @@ class Pathfinder {
 
   initActions() {
     const thisPathfinder = this;
-    thisPathfinder.wrapper.addEventListener('click', function (e) {
+    const initCells = function(e) {
       if (e.target.closest(select.pathfinder.element)) {
         thisPathfinder.selectPath(e.target.closest(select.pathfinder.element));
       }
-    });
+    };
+    thisPathfinder.wrapper.addEventListener('click', initCells);
     thisPathfinder.controlsButton.addEventListener('click', function() {
-      thisPathfinder.finishDrawing();
+      thisPathfinder.finishDrawing(initCells);
     });
   }
 
@@ -175,15 +176,44 @@ class Pathfinder {
     thisPathfinder.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
 
-  finishDrawing() {
+  finishDrawing(functionToRemove) {
     const thisPathfinder = this;
     const path = thisPathfinder.route;
     if (path.length >= settings.pathfinder.minPathLength) {
-      const oldWrapper = thisPathfinder.wrapper;
-      const newWrapper = oldWrapper.cloneNode(true);
-      oldWrapper.parentNode.replaceChild(newWrapper, oldWrapper);
+      thisPathfinder.wrapper.removeEventListener('click', functionToRemove);
       thisPathfinder.controlsButton.innerHTML = settings.textContent.pickCells.btnText;
       thisPathfinder.titleMessage.innerHTML = settings.textContent.pickCells.title;
+      thisPathfinder.initSecondStage();
+    }
+  }
+
+  initSecondStage() {
+    const thisPathfinder = this;
+    thisPathfinder.selectedPoints = [];
+    const initPoints = function (e) {
+      if (e.target.closest(select.pathfinder.elementActive)) {
+        thisPathfinder.selectPoint(e.target.closest(select.pathfinder.elementActive));
+      }
+    };
+    thisPathfinder.wrapper.addEventListener('dblclick', initPoints);
+  }
+
+  selectPoint(element) {
+    const thisPathfinder = this;
+    const posX = element.posX;
+    const posY = element.posY;
+    if (
+      thisPathfinder.selectedPoints.length < settings.pathfinder.maxPointNumber &&
+      !thisPathfinder.testIndex(posX, posY, settings.pathfinder.selectedPoints)
+    ) {
+      thisPathfinder.selectedPoints.push([posX, posY]);
+      element.classList.toggle(classNames.pathfinder.startEnd);
+    } else if (thisPathfinder.testIndex(posX, posY, settings.pathfinder.selectedPoints)) {
+      thisPathfinder.selectedPoints.splice(
+        thisPathfinder.getIndex(posX, posY, settings.pathfinder.selectedPoints),
+        1
+      );
+      element.classList.toggle(classNames.pathfinder.startEnd);
     }
   }
 }
