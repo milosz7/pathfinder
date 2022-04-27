@@ -29,6 +29,7 @@ export const classNames = {
   pathfinder: {
     element: 'grid-element',
     active: 'active',
+    startEnd: 'start-end',
   }
 };
 
@@ -38,7 +39,9 @@ export const settings = {
     coordinateLimitDefault: 9,
     testPathID: 'testPath',
     routeID: 'route',
+    selectedPoints: 'selectedPoints',
     minPathLength: 3,
+    maxPointNumber: 2,
   },
   textContent: {
     drawing: {
