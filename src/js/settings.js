@@ -7,6 +7,7 @@ export const select = {
     about: '#about',
     finder: '#finder,',
     pathfinder: '.pathfinder-grid',
+    messageBox: '.toast',
   },
   nav: {
     links: '.nav__link',
@@ -17,6 +18,9 @@ export const select = {
     controlsButton: '.pathfinder-controls',
     messageTitle: '.pathfinder-message',
   },
+  messageBox: {
+    text: '.toast__text',
+  }
 };
 
 export const classNames = {
@@ -30,7 +34,10 @@ export const classNames = {
     element: 'grid-element',
     active: 'active',
     startEnd: 'start-end',
-  }
+  },
+  messageBox: {
+    active: 'active',
+  },
 };
 
 export const settings = {
@@ -43,7 +50,13 @@ export const settings = {
     minPathLength: 3,
     maxPointNumber: 2,
   },
-  textContent: {
+  messageBox: {
+    displayTime: 1500,
+  },
+};
+
+export const textMessages = {
+  pathfinder: {
     drawing: {
       title: 'Draw routes',
       btnText: 'Finish Drawing',
@@ -56,5 +69,12 @@ export const settings = {
       title: 'The best route is...',
       btnText: 'Start again',
     },
+  },
+  errors: {
+    notAdjacent: 'Please select a cell that is adjacent to active ones.',
+    pathTooShort: 'Path has to consist of at least ' + settings.pathfinder.minPathLength + ' cells.',
+    breakPath: 'You cannot remove this cell as it will break the path.',
+    choosePoints: 'Please choose both start and end point.',
+    tooManyPoints: 'The maximum number of start/end points you can choose is ' + settings.pathfinder.maxPointNumber + '.',
   },
 };
