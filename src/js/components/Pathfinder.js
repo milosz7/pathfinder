@@ -1,5 +1,6 @@
 import { select, settings, classNames } from '../settings.js';
 import PathfinderCell from './PathfinderCell.js';
+import PathfinderSecondStage from './PathfinderSecondStage.js';
 
 class Pathfinder {
   constructor(wrapper) {
@@ -21,9 +22,6 @@ class Pathfinder {
       const gridElement = document.createElement('div');
       const cell = new PathfinderCell(gridElement, posX, posY);
       thisPathfinder.cells.push(cell);
-      // gridElement.classList.add(classNames.pathfinder.element);
-      // gridElement.setAttribute('pos-x', posX);
-      // gridElement.setAttribute('pos-y', posY);
       if (posX % settings.pathfinder.coordinateLimitDefault === 0 && posX !== 0) {
         posY++;
         posX = 0;
@@ -46,7 +44,6 @@ class Pathfinder {
   }
 
   toggleStatus(coordinates, cell) {
-    debugger;
     const thisPathfinder = this;
     const path = thisPathfinder.route;
     const posX = cell.posX;
@@ -182,8 +179,12 @@ class Pathfinder {
       }
     };
     thisPathfinder.wrapper.addEventListener('click', initCells);
-    thisPathfinder.controlsButton.addEventListener('click', function() {
-      thisPathfinder.finishDrawing(initCells);
+    thisPathfinder.controlsButton.addEventListener('click', function handler() {
+      const path = thisPathfinder.route;
+      if (path.length >= settings.pathfinder.minPathLength) {
+        thisPathfinder.finishDrawing(initCells);
+        this.removeEventListener('click', handler);
+      }
     });
   }
 
@@ -195,43 +196,17 @@ class Pathfinder {
 
   finishDrawing(functionToRemove) {//stworzyc obiekt z danymi i wyslac do 2 etapu
     const thisPathfinder = this;
-    const path = thisPathfinder.route;
-    if (path.length >= settings.pathfinder.minPathLength) {
-      thisPathfinder.wrapper.removeEventListener('click', functionToRemove);
-      thisPathfinder.controlsButton.innerHTML = settings.textContent.pickCells.btnText;
-      thisPathfinder.titleMessage.innerHTML = settings.textContent.pickCells.title;
-      thisPathfinder.initSecondStage();
-    }
-  }
-
-  initSecondStage() {
-    const thisPathfinder = this;
-    thisPathfinder.selectedPoints = [];
-    const initPoints = function (e) {
-      if (e.target.closest(select.pathfinder.elementActive)) {
-        thisPathfinder.selectPoint(e.target.closest(select.pathfinder.elementActive));
-      }
+    const pathfinderData = {
+      wrapper: thisPathfinder.wrapper,
+      route: thisPathfinder.route,
+      cells: thisPathfinder.cells,
+      controlsButton: thisPathfinder.controlsButton,
+      titleMessage: thisPathfinder.titleMessage,
     };
-    thisPathfinder.wrapper.addEventListener('dblclick', initPoints);
-  }
-
-  selectPoint(element) {
-    const thisPathfinder = this;
-    const posX = element.posX;
-    const posY = element.posY;
-    if (
-      thisPathfinder.selectedPoints.length < settings.pathfinder.maxPointNumber &&
-      !thisPathfinder.testIndex(posX, posY, settings.pathfinder.selectedPoints)
-    ) {
-      thisPathfinder.selectedPoints.push([posX, posY]);
-      element.classList.toggle(classNames.pathfinder.startEnd);
-    } else if (thisPathfinder.testIndex(posX, posY, settings.pathfinder.selectedPoints)) {
-      thisPathfinder.selectedPoints.splice(
-        thisPathfinder.getIndex(posX, posY, settings.pathfinder.selectedPoints),
-        1
-      );
-      element.classList.toggle(classNames.pathfinder.startEnd);
-    }
+    thisPathfinder.controlsButton.innerHTML = settings.textContent.pickCells.btnText;
+    thisPathfinder.titleMessage.innerHTML = settings.textContent.pickCells.title;
+    thisPathfinder.wrapper.removeEventListener('click', functionToRemove);
+    new PathfinderSecondStage(pathfinderData);
   }
 }
 
