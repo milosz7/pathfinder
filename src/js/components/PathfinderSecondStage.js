@@ -57,8 +57,10 @@ class PathfinderSecondStage {
       if (thisPathfinder.selectedPoints.length === 2) {
         thisPathfinder.confirmPoints(initPoints);
         this.removeEventListener('click', handler);
+      } else if (thisPathfinder.selectedPoints.length !== 2) {
+        helpers.displayMessage(textMessages.errors.choosePoints);
       }
-      helpers.displayMessage(textMessages.errors.choosePoints);
+      
     });
   }
 
