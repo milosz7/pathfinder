@@ -1,4 +1,5 @@
-import { select, settings, classNames } from '../settings.js';
+import { select, settings, classNames, textMessages } from '../settings.js';
+import helpers from '../helpers.js';
 import PathfinderCell from './PathfinderCell.js';
 import PathfinderSecondStage from './PathfinderSecondStage.js';
 
@@ -11,7 +12,6 @@ class Pathfinder {
     thisPathfinder.createElements();
     thisPathfinder.getElements();
     thisPathfinder.initActions();
-    console.log(thisPathfinder);
   }
 
   createElements() {
@@ -54,6 +54,7 @@ class Pathfinder {
         return true;
       }
       if (cell.activeAdjacent === 0) {
+        helpers.displayMessage(textMessages.errors.notAdjacent);
         return false;
       } else if (cell.activeAdjacent > 0) {
         path.push(coordinates);
@@ -110,6 +111,7 @@ class Pathfinder {
           return false;
         } else {
           path.push([posX, posY]);
+          helpers.displayMessage(textMessages.errors.breakPath);
           return true;
         }
       }
@@ -184,7 +186,10 @@ class Pathfinder {
       if (path.length >= settings.pathfinder.minPathLength) {
         thisPathfinder.finishDrawing(initCells);
         this.removeEventListener('click', handler);
+      } else {
+        helpers.displayMessage(textMessages.errors.pathTooShort);
       }
+      
     });
   }
 
@@ -203,8 +208,8 @@ class Pathfinder {
       controlsButton: thisPathfinder.controlsButton,
       titleMessage: thisPathfinder.titleMessage,
     };
-    thisPathfinder.controlsButton.innerHTML = settings.textContent.pickCells.btnText;
-    thisPathfinder.titleMessage.innerHTML = settings.textContent.pickCells.title;
+    thisPathfinder.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
+    thisPathfinder.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
     thisPathfinder.wrapper.removeEventListener('click', functionToRemove);
     new PathfinderSecondStage(pathfinderData);
   }
