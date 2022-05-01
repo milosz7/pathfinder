@@ -10,7 +10,6 @@ class PathfinderThirdStage {
     this.paths = {};
     this.shortestPath = [];
     this.initialPathID = 0;
-    console.log(this);
     this.initPaths();
   }
 
@@ -78,8 +77,7 @@ class PathfinderThirdStage {
     return unfinishedPaths;
   }
 
-  propagatePath(pathName, pathArr) {
-    
+  propagatePath(pathName, pathArr) { 
     const thisPath = this;
     const pointToCheck = pathArr[pathArr.length - 1];
     const cellToCheck = this.getCell(pointToCheck);
@@ -92,24 +90,18 @@ class PathfinderThirdStage {
       }
       return uniqueCoordinates;
     }, []);
-    // console.log('reducedAdjacent', reducedAdjacent);
     if (reducedAdjacent.length === 0) {
       delete this.paths[pathName];
     }
-      
-    
-    
+
     if(cellToCheck.activeAdjacent > 2 && reducedAdjacent.length !== 0) {
-      debugger;
       for (let i = 0; i < reducedAdjacent.length; i++) {
-        if (i === 0 && !this.testIndex(reducedAdjacent[0][0], reducedAdjacent[0][1], this.paths[pathName])) {
+        if (i === 0 && !this.testIndex(reducedAdjacent[i][0], reducedAdjacent[i][1], this.paths[pathName])) {
           this.paths[pathName].push(reducedAdjacent[i]);
-          
         } else if(!this.testIndex(reducedAdjacent[i][0], reducedAdjacent[i][1], this.paths[pathName])){
           this.initialPathID++;
           this.paths[`testPath${this.initialPathID}`] = pathBeforeSplit;
           this.paths[`testPath${this.initialPathID}`].push(reducedAdjacent[i]);
-        
         }
         
       }
@@ -128,16 +120,6 @@ class PathfinderThirdStage {
     }
     if (this.checkPaths(this.endPoint[0], this.endPoint[1]) === 0) {
       this.findShortest();
-    }
-    console.log(this.paths);
-  }
-
-  getIndex(posX, posY, path) {
-    for (let routeCoordinates of path) {
-      if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
-        console.log(path.indexOf(routeCoordinates));
-        return path.indexOf(routeCoordinates);
-      }
     }
   }
 
