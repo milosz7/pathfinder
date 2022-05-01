@@ -37,7 +37,6 @@ class PathfinderSecondStage {
     const posY = parseInt(element.getAttribute('pos-y'), 10);
     for (let cell of this.cells) {
       if (cell.posX === posX && cell.posY === posY) {
-        console.log(cell);
         return cell;
       }
     }
@@ -89,6 +88,7 @@ class PathfinderSecondStage {
     const routeData = {
       selectedPoints: this.selectedPoints,
       route: this.route,
+      cells: this.cells,
     };
     this.controlsButton.innerHTML = textMessages.pathfinder.result.btnText;
     this.titleMessage.innerHTML = textMessages.pathfinder.result.title;
