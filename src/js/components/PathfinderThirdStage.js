@@ -5,7 +5,7 @@ class PathfinderThirdStage {
     this.route = data.route;
     this.startPoint = data.selectedPoints[0];
     this.endPoint = data.selectedPoints[1];
-    this.selectedPoints = data.selectedPoints;
+    // this.selectedPoints = data.selectedPoints;
     this.cells = data.cells;
     this.paths = {};
     this.shortestPath = [];
