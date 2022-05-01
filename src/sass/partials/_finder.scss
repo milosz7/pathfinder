@@ -24,6 +24,14 @@
 
     &.start-end {
       background-color: darken($clr-primary, 20%);
+
+      &.shortest {
+        background-color: darken($clr-secondary, 20%);
+      }
+    }
+
+    &.shortest {
+      background-color: $clr-secondary;
     }
   }
 }
