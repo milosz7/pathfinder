@@ -208,6 +208,9 @@ class Pathfinder {
       controlsButton: thisPathfinder.controlsButton,
       titleMessage: thisPathfinder.titleMessage,
     };
+    for (let cell of thisPathfinder.cells) {
+      thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
+    }
     thisPathfinder.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
     thisPathfinder.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
     thisPathfinder.wrapper.removeEventListener('click', functionToRemove);
