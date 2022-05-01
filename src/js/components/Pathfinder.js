@@ -126,7 +126,6 @@ class Pathfinder {
         return path.indexOf(routeCoordinates);
       }
     }
-    // return settings.noIndexValue;
   }
 
   testIndex(posX, posY, pathArr) {//scalić
@@ -166,7 +165,6 @@ class Pathfinder {
     const thisPathfinder = this;
     for (let cell of thisPathfinder.cells) {
       if (cell.posX === posX && cell.posY === posY) {
-        console.log(cell);
         return cell;
       }
     }
@@ -199,7 +197,7 @@ class Pathfinder {
     thisPathfinder.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
 
-  finishDrawing(functionToRemove) {//stworzyc obiekt z danymi i wyslac do 2 etapu
+  finishDrawing(functionToRemove) {
     const thisPathfinder = this;
     const pathfinderData = {
       wrapper: thisPathfinder.wrapper,
