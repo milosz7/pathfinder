@@ -34,6 +34,7 @@ export const classNames = {
     element: 'grid-element',
     active: 'active',
     startEnd: 'start-end',
+    shortest: 'shortest',
   },
   messageBox: {
     active: 'active',
