@@ -1,14 +1,12 @@
-import { classNames } from '../settings.js';
+import { classNames, settings } from '../settings.js';
 
 class PathfinderThirdStage {
   constructor(data) {
     this.route = data.route;
     this.startPoint = data.selectedPoints[0];
     this.endPoint = data.selectedPoints[1];
-    // this.selectedPoints = data.selectedPoints;
     this.cells = data.cells;
     this.paths = {};
-    this.shortestPath = [];
     this.initialPathID = 0;
     this.initPaths();
   }
@@ -46,15 +44,15 @@ class PathfinderThirdStage {
         this.propagatePath(path, this.paths[path]);
       }
     }
-    if (this.checkPaths(endPointX, endPointY) === 0) {
-      this.findShortest();
-    }
   }
 
   findShortest() {
     for (let path in this.paths) {
-      if (this.paths[path].length < this.shortestPath.length || this.shortestPath.length === 0) {
+      if (this.paths[path].length < this.shortestPath.length && this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path]) || this.shortestPath.length === 0) {
         this.shortestPath = this.paths[path];
+      }
+      if (this.paths[path].length !== this.shortestPath.length || !this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
+        delete this.paths[path];
       }
     }
     this.markShortest();
@@ -68,16 +66,30 @@ class PathfinderThirdStage {
   }
 
   checkPaths(endPointX, endPointY) {
+    let finishedPaths = 0;
     let unfinishedPaths = 0;
     for (let path in this.paths) {
-      if (!this.testIndex(endPointX, endPointY, this.paths[path])) {
+      if (this.testIndex(endPointX, endPointY, this.paths[path])) {
+        finishedPaths++;
+      } else {
         unfinishedPaths++;
       }
     }
-    return unfinishedPaths;
+    return [finishedPaths, unfinishedPaths];
+  }
+
+  testSplit(reducedAdjacent) {
+    for (let coordinates of reducedAdjacent) {
+      const cellToCheck = this.getCell(coordinates);
+      if (cellToCheck.activeAdjacent <= 2) {
+        return false;
+      }
+    }
+    return true;
   }
 
   propagatePath(pathName, pathArr) { 
+    console.log(this.paths);
     const thisPath = this;
     const pointToCheck = pathArr[pathArr.length - 1];
     const cellToCheck = this.getCell(pointToCheck);
@@ -85,41 +97,58 @@ class PathfinderThirdStage {
     const adjacentCells = this.getAdjacent(cellToCheck);
     const reducedAdjacent = adjacentCells.reduce(function(uniqueCoordinates, coordinateToCheck) {
       if(!thisPath.testIndex(coordinateToCheck[0], coordinateToCheck[1], pathArr))  {
-        uniqueCoordinates.push(coordinateToCheck);
-        
+        uniqueCoordinates.push(coordinateToCheck); 
       }
       return uniqueCoordinates;
     }, []);
+    if (reducedAdjacent.length > 1 && this.testSplit(reducedAdjacent)) {
+      const distancesFromEnd = [];
+      for (let coordinates of reducedAdjacent) {
+        const distance = Math.abs(coordinates[0] - this.endPoint[0]) + Math.abs(coordinates[1] - this.endPoint[1]);
+        distancesFromEnd.push(distance);
+      }
+      const farthestCell = Math.max(...distancesFromEnd);
+      for (let distance of distancesFromEnd) {
+        if (distance === farthestCell && reducedAdjacent.length !== 1) {
+          const toRemove = distancesFromEnd.indexOf(distance);
+          reducedAdjacent.splice(toRemove, 1);
+        }
+      }
+    }
     if (reducedAdjacent.length === 0) {
       delete this.paths[pathName];
-    }
-
-    if(cellToCheck.activeAdjacent > 2 && reducedAdjacent.length !== 0) {
+    } else if (cellToCheck.activeAdjacent > 2) {
       for (let i = 0; i < reducedAdjacent.length; i++) {
-        if (i === 0 && !this.testIndex(reducedAdjacent[i][0], reducedAdjacent[i][1], this.paths[pathName])) {
+        if (i === 0) {
           this.paths[pathName].push(reducedAdjacent[i]);
-        } else if(!this.testIndex(reducedAdjacent[i][0], reducedAdjacent[i][1], this.paths[pathName])){
+        } else {
           this.initialPathID++;
           this.paths[`testPath${this.initialPathID}`] = pathBeforeSplit;
           this.paths[`testPath${this.initialPathID}`].push(reducedAdjacent[i]);
         }
-        
       }
-      
-    } else if(cellToCheck.activeAdjacent === 2 && reducedAdjacent.length !== 0) {
-      for (let coordinates of reducedAdjacent) {
-        if (!this.testIndex(coordinates[0], coordinates[1], this.paths[pathName])) {
-          pathArr.push(coordinates);
+    } else if (cellToCheck.activeAdjacent === 2 || reducedAdjacent.length === 1) {
+      pathArr.push(reducedAdjacent[0]);
+    }
+    for (let path in this.paths) {
+      if (this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
+        if (!this.shortestPath) {
+          this.shortestPath = this.paths[path];
+        }
+        if (this.paths[path].length < this.shortestPath.length) {
+          this.shortestPath = this.paths[path];
         }
       }
     }
     for(let path in this.paths) {
-      if (!this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
+      const pathsData = this.checkPaths(this.endPoint[0], this.endPoint[1]);
+      const unfinishedPaths = pathsData[1];
+      const finishedPaths = pathsData[0];
+      if (finishedPaths >= settings.pathfinder.pathGenerationLimit || unfinishedPaths === 0) {
+        this.findShortest();
+      } else if (!this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
         this.propagatePath(path, this.paths[path]);
       }
-    }
-    if (this.checkPaths(this.endPoint[0], this.endPoint[1]) === 0) {
-      this.findShortest();
     }
   }
 
