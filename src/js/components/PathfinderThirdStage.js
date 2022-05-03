@@ -1,14 +1,23 @@
-import { classNames, settings } from '../settings.js';
+import { classNames, settings, select, textMessages } from '../settings.js';
 
 class PathfinderThirdStage {
   constructor(data) {
+    console.log(this);
     this.route = data.route;
     this.startPoint = data.selectedPoints[0];
     this.endPoint = data.selectedPoints[1];
+    this.shortestPath = [];
     this.cells = data.cells;
     this.paths = {};
     this.initialPathID = 0;
+    this.getElements();
     this.initPaths();
+  }
+
+  getElements() {
+    this.wrapper = document.querySelector(select.containerOf.pathfinder);
+    this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
+    this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
 
   getCell(coordinates) {
@@ -42,6 +51,8 @@ class PathfinderThirdStage {
     for(let path in this.paths) {
       if (!this.testIndex(endPointX, endPointY, this.paths[path])) {
         this.propagatePath(path, this.paths[path]);
+      } else {
+        this.findShortest();
       }
     }
   }
@@ -55,6 +66,7 @@ class PathfinderThirdStage {
         delete this.paths[path];
       }
     }
+    console.log(this.paths);
     this.markShortest();
   }
 
@@ -63,6 +75,15 @@ class PathfinderThirdStage {
       const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
       cellToActivate.classList.add(classNames.pathfinder.shortest);
     }
+    this.controlsButton.addEventListener('click', () => {
+      const reset = new CustomEvent('reset', {
+        bubbles: true,
+      });
+      this.controlsButton.textContent = textMessages.pathfinder.drawing.btnText;
+      this.titleMessage.textContent = textMessages.pathfinder.drawing.title;
+      this.controlsButton.replaceWith(this.controlsButton.cloneNode(true));
+      this.wrapper.dispatchEvent(reset);
+    });
   }
 
   checkPaths(endPointX, endPointY) {
@@ -88,19 +109,24 @@ class PathfinderThirdStage {
     return true;
   }
 
-  propagatePath(pathName, pathArr) { 
-    console.log(this.paths);
+  reduceAdjacent(adjacentCells, pathArr) {
     const thisPath = this;
-    const pointToCheck = pathArr[pathArr.length - 1];
-    const cellToCheck = this.getCell(pointToCheck);
-    const pathBeforeSplit = JSON.parse(JSON.stringify(pathArr));
-    const adjacentCells = this.getAdjacent(cellToCheck);
     const reducedAdjacent = adjacentCells.reduce(function(uniqueCoordinates, coordinateToCheck) {
       if(!thisPath.testIndex(coordinateToCheck[0], coordinateToCheck[1], pathArr))  {
         uniqueCoordinates.push(coordinateToCheck); 
       }
       return uniqueCoordinates;
     }, []);
+    return reducedAdjacent;
+  }
+
+  propagatePath(pathName, pathArr) { 
+    const pointToCheck = pathArr[pathArr.length - 1];
+    const cellToCheck = this.getCell(pointToCheck);
+    let pathBeforeSplit = JSON.parse(JSON.stringify(pathArr));
+    const adjacentCells = this.getAdjacent(cellToCheck);
+    const reducedAdjacent = this.reduceAdjacent(adjacentCells, pathArr);
+
     if (reducedAdjacent.length > 1 && this.testSplit(reducedAdjacent)) {
       const distancesFromEnd = [];
       for (let coordinates of reducedAdjacent) {
@@ -125,21 +151,19 @@ class PathfinderThirdStage {
           this.initialPathID++;
           this.paths[`testPath${this.initialPathID}`] = pathBeforeSplit;
           this.paths[`testPath${this.initialPathID}`].push(reducedAdjacent[i]);
+          if (reducedAdjacent.length === 3) {
+            pathBeforeSplit = JSON.parse(JSON.stringify(pathArr));
+            pathBeforeSplit.pop();
+          }
         }
       }
     } else if (cellToCheck.activeAdjacent === 2 || reducedAdjacent.length === 1) {
       pathArr.push(reducedAdjacent[0]);
     }
-    for (let path in this.paths) {
-      if (this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
-        if (!this.shortestPath) {
-          this.shortestPath = this.paths[path];
-        }
-        if (this.paths[path].length < this.shortestPath.length) {
-          this.shortestPath = this.paths[path];
-        }
-      }
-    }
+    this.checkPathStatus();
+  }
+
+  checkPathStatus() {
     for(let path in this.paths) {
       const pathsData = this.checkPaths(this.endPoint[0], this.endPoint[1]);
       const unfinishedPaths = pathsData[1];
