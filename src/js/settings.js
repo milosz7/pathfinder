@@ -50,6 +50,7 @@ export const settings = {
     selectedPoints: 'selectedPoints',
     minPathLength: 3,
     maxPointNumber: 2,
+    pathGenerationLimit: 3,
   },
   messageBox: {
     displayTime: 1500,
