@@ -5,11 +5,15 @@ import PathfinderThirdStage from './PathfinderThirdStage.js';
 class PathfinderSecondStage {
   constructor(data) {
     this.wrapper = data.wrapper;
-    this.controlsButton = data.controlsButton;
     this.route = data.route;
-    this.titleMessage = data.titleMessage;
     this.cells = data.cells;
+    this.getElements();
     this.initActions();
+  }
+
+  getElements() {
+    this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
+    this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
 
   getIndex(posX, posY, pathArr) {
