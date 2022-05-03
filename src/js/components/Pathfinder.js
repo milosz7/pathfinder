@@ -203,8 +203,6 @@ class Pathfinder {
       wrapper: thisPathfinder.wrapper,
       route: thisPathfinder.route,
       cells: thisPathfinder.cells,
-      controlsButton: thisPathfinder.controlsButton,
-      titleMessage: thisPathfinder.titleMessage,
     };
     for (let cell of thisPathfinder.cells) {
       thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
