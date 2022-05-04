@@ -23,10 +23,9 @@ class PathfinderSecondStage {
         return path.indexOf(routeCoordinates);
       }
     }
-    // return settings.noIndexValue;
   }
 
-  testIndex(posX, posY, pathArr) {//scalić
+  testIndex(posX, posY, pathArr) {
     const path = this[pathArr];
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
@@ -53,6 +52,8 @@ class PathfinderSecondStage {
       if (e.target.closest(select.pathfinder.elementActive)) {
         const clickedCell = thisPathfinder.selectCell(e.target.closest(select.pathfinder.elementActive));
         thisPathfinder.selectPoint(clickedCell);
+      } else if (e.target.closest(select.pathfinder.element)) {
+        helpers.displayMessage(textMessages.errors.notInRoute);
       }
     };
     this.wrapper.addEventListener('dblclick', initPoints);
