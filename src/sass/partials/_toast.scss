@@ -11,9 +11,8 @@
   opacity: 0;
   transition: all 0.5s;
   top: 5px;
-  left: 50%;
   background: $clr-error;
-  transform: translateX(-50%);
+  margin: 0 auto;
 
   &.active {
     opacity: 1;
