@@ -170,6 +170,16 @@ class Pathfinder {
     }
   }
 
+  handler(initCells) {
+    console.log(this);
+    if (this.route.length >= settings.pathfinder.minPathLength) {
+      this.finishDrawing(initCells);
+      this.controlsButton.removeEventListener('click', this.handler.bind(this));
+    } else {
+      helpers.displayMessage(textMessages.errors.pathTooShort);
+    }
+  }
+
   initActions() {
     const thisPathfinder = this;
     const initCells = function(e) {
@@ -179,16 +189,7 @@ class Pathfinder {
       }
     };
     thisPathfinder.wrapper.addEventListener('click', initCells);
-    thisPathfinder.controlsButton.addEventListener('click', function handler() {
-      const path = thisPathfinder.route;
-      if (path.length >= settings.pathfinder.minPathLength) {
-        thisPathfinder.finishDrawing(initCells);
-        this.removeEventListener('click', handler);
-      } else {
-        helpers.displayMessage(textMessages.errors.pathTooShort);
-      }
-      
-    });
+    thisPathfinder.controlsButton.addEventListener('click', this.handler.bind(this));
   }
 
   getElements() {

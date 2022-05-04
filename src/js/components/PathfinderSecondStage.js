@@ -46,6 +46,17 @@ class PathfinderSecondStage {
     }
   }
 
+  handler(initPoints) {
+    console.log('test');
+    if (this.selectedPoints.length === 2) {
+      this.confirmPoints(initPoints);
+      this.controlsButton.removeEventListener('click', this.handler);
+    } else if (this.selectedPoints.length !== 2) {
+      console.log(this.selectedPoints);
+      helpers.displayMessage(textMessages.errors.choosePoints);
+    }
+  }
+
   initActions() {
     const thisPathfinder = this;
     this.selectedPoints = [];
@@ -56,15 +67,16 @@ class PathfinderSecondStage {
       }
     };
     this.wrapper.addEventListener('dblclick', initPoints);
-    this.controlsButton.addEventListener('click', function handler() {
-      if (thisPathfinder.selectedPoints.length === 2) {
-        thisPathfinder.confirmPoints(initPoints);
-        this.removeEventListener('click', handler);
-      } else if (thisPathfinder.selectedPoints.length !== 2) {
-        helpers.displayMessage(textMessages.errors.choosePoints);
-      }
+    this.controlsButton.addEventListener('click', this.handler.bind(this) 
+      // if (thisPathfinder.selectedPoints.length === 2) {
+      //   thisPathfinder.confirmPoints(initPoints);
+      //   this.removeEventListener('click', handler);
+      // } else if (thisPathfinder.selectedPoints.length !== 2) {
+      //   console.log(thisPathfinder.selectedPoints);
+      //   helpers.displayMessage(textMessages.errors.choosePoints);
+      // }
       
-    });
+);
   }
 
   selectPoint(cell) {
@@ -85,7 +97,7 @@ class PathfinderSecondStage {
     } else {
       helpers.displayMessage(textMessages.errors.tooManyPoints);
     }
-    
+    console.log(this.selectedPoints);  
   }
 
   confirmPoints(functionToRemove) {
