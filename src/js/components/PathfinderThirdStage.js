@@ -162,10 +162,10 @@ class PathfinderThirdStage {
   }
 
   checkPathStatus() {
+    const pathsData = this.checkPaths(this.endPoint[0], this.endPoint[1]);
+    const unfinishedPaths = pathsData[1];
+    const finishedPaths = pathsData[0];
     for(let path in this.paths) {
-      const pathsData = this.checkPaths(this.endPoint[0], this.endPoint[1]);
-      const unfinishedPaths = pathsData[1];
-      const finishedPaths = pathsData[0];
       if (finishedPaths >= settings.pathfinder.pathGenerationLimit || unfinishedPaths === 0) {
         this.findShortest();
       } else if (!this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
