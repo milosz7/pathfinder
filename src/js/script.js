@@ -36,6 +36,11 @@ const app = {
       link.classList.toggle(classNames.navLink.active, link.getAttribute('href') === '#' + pageID);
     }
     window.location.hash = `/${pageID}`;
+    if (window.location.hash !== '#/finder') {
+      // eslint-disable-next-line no-undef
+      AOS.refresh();
+    }
+    
   },
 
   initPathfinder: function() {
