@@ -61,3 +61,37 @@
 .content__subtitle {
   @include text-format(1.25rem, 1.5, 400);
 }
+
+[data-aos="opacity-fade-rtl"] {
+  opacity: 0;
+  transition-property: transform, opacity;
+
+  &.aos-animate {
+    opacity: 1;
+  }
+
+  @media screen and (min-width: 992px) {
+    transform: translateX(100px);
+
+    &.aos-animate {
+      transform: translateX(0);
+    }
+  }
+}
+
+[data-aos="opacity-fade-ltr"] {
+  opacity: 0;
+  transition-property: transform, opacity;
+
+  &.aos-animate {
+    opacity: 1;
+  }
+
+  @media screen and (min-width: 992px) {
+    transform: translateX(-100px);
+
+    &.aos-animate {
+      transform: translateX(0);
+    }
+  }
+}
