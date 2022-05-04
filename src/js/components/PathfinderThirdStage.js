@@ -58,10 +58,17 @@ class PathfinderThirdStage {
 
   findShortest() {
     for (let path in this.paths) {
-      if (this.paths[path].length < this.shortestPath.length && this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path]) || this.shortestPath.length === 0) {
+      if (
+        (this.paths[path].length < this.shortestPath.length &&
+          this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) ||
+        this.shortestPath.length === 0
+      ) {
         this.shortestPath = this.paths[path];
       }
-      if (this.paths[path].length !== this.shortestPath.length || !this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
+      if (
+        this.paths[path].length !== this.shortestPath.length ||
+        !this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])
+      ) {
         delete this.paths[path];
       }
     }
