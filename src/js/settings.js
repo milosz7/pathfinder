@@ -14,7 +14,7 @@ export const select = {
   },
   pathfinder: {
     element: '.grid-element',
-    elementActive: '.active',
+    elementActive: '.grid-element.active',
     controlsButton: '.pathfinder-controls',
     messageTitle: '.pathfinder-message',
   },
@@ -78,5 +78,6 @@ export const textMessages = {
     breakPath: 'You cannot remove this cell as it will break the path.',
     choosePoints: 'Please choose both start and end point.',
     tooManyPoints: 'The maximum number of start/end points you can choose is ' + settings.pathfinder.maxPointNumber + '.',
+    notInRoute: 'Please select a cell that is a part of a route.',
   },
 };
