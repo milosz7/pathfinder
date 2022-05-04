@@ -2,7 +2,6 @@ import { classNames, settings, select, textMessages } from '../settings.js';
 
 class PathfinderThirdStage {
   constructor(data) {
-    console.log(this);
     this.route = data.route;
     this.startPoint = data.selectedPoints[0];
     this.endPoint = data.selectedPoints[1];
@@ -66,7 +65,6 @@ class PathfinderThirdStage {
         delete this.paths[path];
       }
     }
-    console.log(this.paths);
     this.markShortest();
   }
 
