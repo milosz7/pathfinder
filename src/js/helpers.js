@@ -10,7 +10,12 @@ const helpers = {
     setTimeout(function() {
       messageBox.classList.toggle(classNames.messageBox.active);
     }, settings.messageBox.displayTime);
-  }
+  },
+
+  isMobile: function() {
+    const isMobileDevice = /Mobi/i.test(window.navigator.userAgent);
+    return isMobileDevice;
+  }, 
 };
 
 export default helpers;

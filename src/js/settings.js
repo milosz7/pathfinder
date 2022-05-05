@@ -45,12 +45,18 @@ export const settings = {
   pathfinder: {
     elementsAmountDefault: 100,
     coordinateLimitDefault: 9,
+    elementsInRow: 10,
     testPathID: 'testPath',
     routeID: 'route',
     selectedPoints: 'selectedPoints',
     minPathLength: 3,
     maxPointNumber: 2,
     pathGenerationLimit: 10,
+  },
+  pathfinderMobile: {
+    elementsAmountDefault: 36,
+    coordinateLimitDefault: 5,
+    elementsInRow: 6,
   },
   messageBox: {
     displayTime: 1500,
