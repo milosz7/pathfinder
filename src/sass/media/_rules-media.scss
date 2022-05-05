@@ -1,0 +1,19 @@
+@media (max-width: 576px) {
+  .rules__container {
+    padding: $gutter $gutter * 2;
+  }
+
+  .rules__img {
+    min-width: 100px;
+    height: 75px;
+  }
+
+  .content-box__title {
+    @include text-format (0.8rem, 0, 700); 
+    margin-top: 0;
+  }
+  
+  .content-box__text {
+    @include text-format(0.7rem, 0, 400);
+  }
+}
