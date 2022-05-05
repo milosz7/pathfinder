@@ -18,18 +18,36 @@ class Pathfinder {
     const thisPathfinder = this;
     let posX = 0;
     let posY = 0;
-    for (let i = 0; i < settings.pathfinder.elementsAmountDefault; i++) {
-      const gridElement = document.createElement('div');
-      const cell = new PathfinderCell(gridElement, posX, posY);
-      thisPathfinder.cells.push(cell);
-      if (posX % settings.pathfinder.coordinateLimitDefault === 0 && posX !== 0) {
-        posY++;
-        posX = 0;
-      } else {
-        posX++;
+    if (helpers.isMobile()) {
+      for (let i = 0; i < settings.pathfinderMobile.elementsAmountDefault; i++) {
+        const gridElement = document.createElement('div');
+        gridElement.style.flexBasis = `${100 / settings.pathfinderMobile.elementsInRow}%`;
+        const cell = new PathfinderCell(gridElement, posX, posY);
+        thisPathfinder.cells.push(cell);
+        if (posX % settings.pathfinderMobile.coordinateLimitDefault === 0 && posX !== 0) {
+          posY++;
+          posX = 0;
+        } else {
+          posX++;
+        }
+        thisPathfinder.wrapper.appendChild(gridElement);
       }
-      thisPathfinder.wrapper.appendChild(gridElement);
+    } else {
+      for (let i = 0; i < settings.pathfinder.elementsAmountDefault; i++) {
+        const gridElement = document.createElement('div');
+        gridElement.style.flexBasis = `${100 / settings.pathfinder.elementsInRow}%`;
+        const cell = new PathfinderCell(gridElement, posX, posY);
+        thisPathfinder.cells.push(cell);
+        if (posX % settings.pathfinder.coordinateLimitDefault === 0 && posX !== 0) {
+          posY++;
+          posX = 0;
+        } else {
+          posX++;
+        }
+        thisPathfinder.wrapper.appendChild(gridElement);
+      }
     }
+  
   }
 
   selectPath(cell) {
