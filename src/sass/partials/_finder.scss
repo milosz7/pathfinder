@@ -11,12 +11,14 @@
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 0 auto $gutter * 2;
-  width: 500px;
-  height: 500px;
+  width: 80vw;
+  aspect-ratio: 1;
+  max-width: 500px;
+  max-height: 500px;
 }
 
 .grid-element {
-  flex-basis: 10%;
+  // flex-basis: 10%;
   border: 2px solid $clr-light;
 
   &.active {
