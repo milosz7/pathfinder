@@ -16,22 +16,35 @@
     <p class="toast__text"></p>
   </div>
   <div class="rules">
-    <h2 class="rules__title">How to use:</h2>
+    <h2 class="rules__title">How to use</h2>
     <div class="rules__container">
-      <h3 class="rules__subtitle">Drawing the path</h3>
-      <p class="rules__text">Left click on a cell to add it to a path, if you change your mind you can remove the cell from the path by clicking it again.</p>
-      <img class="rules__img" src="images/stage1rule.gif" alt="path selection">
+      <div class="content-box">
+        <h3 class="content-box__title">Drawing the path</h3>
+        <p class="content-box__text">Click on a cell to select it. If you change your mind click on an active cell to unstage it.</p>
+      </div>
+      <div class="rules__img">
+        <img class="img" src="images/stage1rule.gif" alt="path selection">
+      </div>
     </div>
     <div class="rules__container">
-      <h3 class="rules__subtitle">Selecting start/end points</h3>
-      <p class="rules__text">Double click on an active cell to make it a start/end point. double click again to unstage it.</p>
-      <img class="rules__img" src="images/stage2rule.gif" alt="start/end selection">
+      <div class="content-box">
+        <h3 class="content-box__title">Selecting start/end points</h3>
+        <p class="content-box__text">Double click on an active cell to make it a start/end point. Double click again to unstage it.</p>
+      </div>
+      <div class="rules__img">
+        <img class="img" src="images/stage2rule.gif" alt="start/end selection">
+      </div>
     </div>
     <div class="rules__container">
-      <h3 class="rules__subtitle">Shortest path generation</h3>
-      <p class="rules__text">After selecting the points click "compute" button. the pathfinder will show you the shortest route!</p>
-      <img class="rules__img" src="images/stage3rule.png" alt="marked route">
+      <div class="content-box">
+        <h3 class="content-box__title">Shortest path generation</h3>
+        <p class="content-box__text">After selecting the points click the "compute" button. The pathfinder will show you the shortest route!</p>
+      </div>
+      <div class="rules__img">
+        <img class="img" src="images/stage3rule.png" alt="marked route">
+      </div>
     </div>
+    <button type="button" class="btn-primary rules-hide">Got it</button>
   </div>
   <nav class="nav">
     <ul class="nav__list">
@@ -72,7 +85,10 @@
       <section id="finder">
         <h2 class="section__title pathfinder-message">Draw Routes</h2>
         <div class="pathfinder-grid"></div>
-        <button type="submit" class="btn-primary pathfinder-controls">Finish Drawing</button>
+        <div class="buttons-box">
+          <button type="submit" class="btn-primary pathfinder-controls">Finish Drawing</button>
+          <button type="button" class="btn-primary rules-button">How To Use</button>
+        </div>
       </section>
     </div>
   </div>
