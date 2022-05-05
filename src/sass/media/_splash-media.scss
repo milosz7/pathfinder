@@ -1,3 +1,9 @@
+@media (max-width: 1400px) {
+  .logo-title {
+    @include text-format(3.75rem, 15, 800);
+  }
+}
+
 @media (max-width: 992px) {
   .splash {
     padding-block: $gutter * 4;
@@ -26,6 +32,7 @@
   .logo-title {
     @include text-format(2rem, 5, 800);
   }
+
   .logo-subtitle {
     @include text-format(1rem, 2, 700);
   }

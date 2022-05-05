@@ -1,0 +1,25 @@
+@media (max-width: 576px) {
+  .grid-element {
+    flex-basis: calc(100% / 6);
+    border: 2px solid $clr-light;
+  }
+}
+
+@media (max-width: 768px) {
+  .section__title {
+    @include text-format(1.5rem, 1, 700);
+  }
+}
+
+@media (max-width: 1200px) {
+  .section__title {
+    padding-bottom: $gutter * 2;
+  }
+}
+
+@media (max-width: 1400px) {
+  .pathfinder-grid {
+    max-width: 450px;
+    max-height: 450px;
+  }
+}
