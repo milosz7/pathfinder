@@ -21,6 +21,7 @@ li {
 body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
+  position: relative;
   line-height: 1.5;
   font-family: $font-main;
   color: $clr-light;
@@ -30,6 +31,15 @@ body {
   background-repeat: no-repeat;
   background-position: top;
   background-size: cover, 100% 100vh;
+
+  &.blur::after {
+    position: fixed;
+    inset: 0 0 0 0;
+    content: '';
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
+    z-index: 2;
+  }
 }
 
 input,
@@ -56,6 +66,7 @@ section {
   @include text-format(1rem, 0.5, 700);
   padding: $gutter * 0.5 $gutter * 1.5;
   display: flex;
+  max-width: 200px;
   background : $clr-primary;
   color: $clr-light;
   text-transform: uppercase;
