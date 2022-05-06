@@ -1,0 +1,54 @@
+.summary {
+  max-width: 600px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  color: $clr-dark;
+  background-color: $clr-light;
+  padding: $gutter * 2;
+  text-transform: uppercase;
+  z-index: 3;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+
+  &__title {
+    @include text-format(1.5rem, 1, 800);
+    text-align: center;
+    padding-bottom: $gutter;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  &__subtitle {
+    @include text-format(1rem, 0.5, 700);
+    display: inline-block;
+  }
+
+  &__text {
+    @include text-format(0.9rem, 0.5, 400);
+    display: inline-block;
+  }
+
+  & > .btn-primary {
+    margin: $gutter auto 0;
+  }
+}
+
+.route-length, .paths-number {
+  color: $clr-primary;
+}
+
+.route-shortest {
+  color: darken($clr-secondary, 20%);
+}
