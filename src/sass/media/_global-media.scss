@@ -3,4 +3,32 @@
     background-size: cover;
     background-repeat: repeat;
   }
+
+  .btn-primary {
+    @include text-format(0.5rem, 0, 700);
+    padding: $gutter * 0.5 $gutter * 1.5;
+    display: flex;
+    max-width: 125px;
+    background : $clr-primary;
+    color: $clr-light;
+    text-transform: uppercase;
+    margin: 0 auto;
+    border: 0;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 812px) and (orientation: landscape) {
+  body::after {
+    position: fixed;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
+    color: $clr-light;
+    content: 'The app works only in portrait orientation, please rotate your device or resize the browser window ;)';
+    inset: 0 0 0 0;
+    width: 100%;
+    text-align: center;
+    padding: $gutter * 2;
+    @include text-format(2rem, 0, 700);
+    backdrop-filter: blur(10px);
+    z-index: 4;
+  }
 }
