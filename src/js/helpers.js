@@ -6,10 +6,12 @@ const helpers = {
     const messageBox = document.querySelector(select.containerOf.messageBox);
     const messageText = messageBox.querySelector(select.messageBox.text);
     messageText.innerHTML = msg;
-    messageBox.classList.toggle(classNames.messageBox.active);
-    setTimeout(function() {
+    if (!messageBox.classList.contains(classNames.messageBox.active)) {
       messageBox.classList.toggle(classNames.messageBox.active);
-    }, settings.messageBox.displayTime);
+      setTimeout(function() {
+        messageBox.classList.toggle(classNames.messageBox.active);
+      }, settings.messageBox.displayTime);
+    }
   },
 
   isMobile: function() {
