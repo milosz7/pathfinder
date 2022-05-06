@@ -59,6 +59,7 @@ class Pathfinder {
       classNames.pathfinder.active,
       thisPathfinder.toggleStatus(clickedCoordinates, cell)
     );
+    thisPathfinder.markClickable();
   }
 
   toggleStatus(coordinates, cell) {
@@ -132,6 +133,21 @@ class Pathfinder {
           helpers.displayMessage(textMessages.errors.breakPath);
           return true;
         }
+      }
+    }
+  }
+
+  markClickable() {
+    const thisPathfinder = this;
+    for (let cell of thisPathfinder.cells) {
+      thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
+      if (cell.activeAdjacent > 0) {
+        cell.wrapper.classList.toggle(
+          classNames.pathfinder.clickable,
+          !cell.wrapper.classList.contains(classNames.pathfinder.active)
+        );
+      } else if (cell.activeAdjacent === 0) {
+        cell.wrapper.classList.remove(classNames.pathfinder.clickable);
       }
     }
   }
@@ -224,6 +240,9 @@ class Pathfinder {
     };
     for (let cell of thisPathfinder.cells) {
       thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
+      if (cell.wrapper.classList.contains(classNames.pathfinder.clickable)) {
+        cell.wrapper.classList.remove(classNames.pathfinder.clickable);
+      }
     }
     thisPathfinder.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
     thisPathfinder.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
