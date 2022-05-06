@@ -41,6 +41,7 @@ export const classNames = {
     active: 'active',
     startEnd: 'start-end',
     shortest: 'shortest',
+    clickable: 'clickable',
   },
   messageBox: {
     active: 'active',
