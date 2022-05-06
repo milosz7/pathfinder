@@ -68,7 +68,7 @@ export const settings = {
     elementsInRow: 6,
   },
   messageBox: {
-    displayTime: 1500,
+    displayTime: 3000,
   },
 };
 
