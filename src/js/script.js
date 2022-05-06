@@ -6,7 +6,7 @@ const app = {
   init: function() {
     this.initPages();
     this.initPathfinder();
-    this.initRules();
+    this.initButtons();
     this.initReset(); 
   },
 
@@ -56,18 +56,20 @@ const app = {
     });
   },
 
-  initRules: function() {
+  initButtons: function() {
     const rulesBox = document.querySelector(select.containerOf.rules);
     this.rulesButton = document.querySelector(select.rules.rulesDisplayButton);
-    this.rulesHideButton = document.querySelector(select.rules.rulesHideButton);
+    this.rulesHideButtons = document.querySelectorAll(select.buttons.hideButton);
     this.rulesButton.addEventListener('click', () => {
       document.body.classList.add(classNames.page.blur);
       rulesBox.classList.add(classNames.rulesBox.active);
     });
-    this.rulesHideButton.addEventListener('click', () => {
-      document.body.classList.remove(classNames.page.blur);
-      rulesBox.classList.remove(classNames.rulesBox.active);
-    });
+    for (let button of this.rulesHideButtons) {
+      button.addEventListener('click', () => {
+        document.body.classList.remove(classNames.page.blur);
+        button.parentElement.classList.remove(classNames.rulesBox.active);
+      });
+    }
   }
 };
 
