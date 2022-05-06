@@ -2,19 +2,36 @@
   @include text-format(0.8rem, 0, 400);
   width: 250px;
   text-align: center;
-  position: sticky;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   border-radius: 4px;
-  display: flex;
-  padding: $gutter $gutter * 2;
+  max-height: 0;
   justify-content: center;
   align-items: center;
   opacity: 0;
-  transition: all 0.5s;
   top: 5px;
   background: $clr-error;
   margin: 0 auto;
 
   &.active {
+    display: flex;
+    animation: dropdown 1.5s ease-in-out alternate 2;
     opacity: 1;
+  }
+}
+
+.toast__text {
+  padding: $gutter $gutter * 2;
+}
+
+@keyframes dropdown {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    max-height: 100px;
   }
 }
