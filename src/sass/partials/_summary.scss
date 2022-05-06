@@ -39,10 +39,10 @@
     @include text-format(0.9rem, 0.5, 400);
     display: inline-block;
   }
+}
 
-  & > .btn-primary {
-    margin: $gutter auto 0;
-  }
+.summary .btn-primary {
+  margin: $gutter auto 0;
 }
 
 .route-length, .paths-number {

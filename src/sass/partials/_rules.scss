@@ -14,13 +14,13 @@
   padding-block: $gutter;
   display: none;
 
-  & > .btn-primary {
-    margin: 0 auto;
-  }
-
   &.active {
     display: block;
   }
+}
+
+.rules .btn-primary {
+  margin: 0 auto;
 }
 
 .rules__title {
