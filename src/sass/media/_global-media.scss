@@ -5,10 +5,10 @@
   }
 
   .btn-primary {
-    @include text-format(0.5rem, 0, 700);
+    @include text-format(0.8rem, 0, 700);
     padding: $gutter * 0.5 $gutter * 1.5;
     display: flex;
-    max-width: 125px;
+    max-width: 150px;
     background : $clr-primary;
     color: $clr-light;
     text-transform: uppercase;
