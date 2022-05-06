@@ -20,6 +20,10 @@
 .grid-element {
   border: 2px solid $clr-light;
 
+  &.clickable {
+    background-color: rgba($clr-primary, 0.3 );
+  }
+
   &.active {
     background-color: $clr-primary;
 
