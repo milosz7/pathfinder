@@ -18,10 +18,15 @@
     display: flex;
     animation: dropdown 1.5s ease-in-out alternate 2;
     opacity: 1;
+
+    .toast__text {
+      display: block;
+    }
   }
 }
 
 .toast__text {
+  display: none;
   padding: $gutter $gutter * 2;
 }
 
