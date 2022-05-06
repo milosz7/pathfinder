@@ -6,6 +6,7 @@ const app = {
   init: function() {
     this.initPages();
     this.initPathfinder();
+    this.initRules();
     this.initReset(); 
   },
 
@@ -53,8 +54,21 @@ const app = {
       this.wrapper.innerHTML = '';
       this.pathfinder = new Pathfinder(this.wrapper);
     });
-  }
+  },
 
+  initRules: function() {
+    const rulesBox = document.querySelector(select.containerOf.rules);
+    this.rulesButton = document.querySelector(select.rules.rulesDisplayButton);
+    this.rulesHideButton = document.querySelector(select.rules.rulesHideButton);
+    this.rulesButton.addEventListener('click', () => {
+      document.body.classList.add(classNames.page.blur);
+      rulesBox.classList.add(classNames.rulesBox.active);
+    });
+    this.rulesHideButton.addEventListener('click', () => {
+      document.body.classList.remove(classNames.page.blur);
+      rulesBox.classList.remove(classNames.rulesBox.active);
+    });
+  }
 };
 
 app.init();
