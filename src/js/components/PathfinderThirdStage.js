@@ -17,6 +17,7 @@ class PathfinderThirdStage {
     this.wrapper = document.querySelector(select.containerOf.pathfinder);
     this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
     this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
+    this.summary = document.querySelector(select.containerOf.summary);
   }
 
   getCell(coordinates) {
@@ -80,6 +81,7 @@ class PathfinderThirdStage {
       const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
       cellToActivate.classList.add(classNames.pathfinder.shortest);
     }
+    this.displaySummary();
     this.controlsButton.addEventListener('click', () => {
       const reset = new CustomEvent('reset', {
         bubbles: true,
@@ -89,6 +91,18 @@ class PathfinderThirdStage {
       this.controlsButton.replaceWith(this.controlsButton.cloneNode(true));
       this.wrapper.dispatchEvent(reset);
     });
+  }
+
+  displaySummary() {
+    document.body.classList.add(classNames.page.blur);
+    this.summary.classList.add(classNames.summary.active);
+    console.log(this.shortestPath.length);
+    const routeOutput = this.summary.querySelector(select.summary.routeLength);
+    const pathsNumberOutput = this.summary.querySelector(select.summary.pathsNumber);
+    const routeShortestOutput = this.summary.querySelector(select.summary.routeShortest);
+    routeOutput.innerHTML = this.route.length;
+    pathsNumberOutput.innerHTML = Object.keys(this.paths).length;
+    routeShortestOutput.innerHTML = this.shortestPath.length;
   }
 
   checkPaths(endPointX, endPointY) {
