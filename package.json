@@ -48,7 +48,6 @@
     },
     "dependencies": {
         "http-server": "^14.1.0",
-        "json-server": "^0.16.3",
         "sass": "^1.35.1"
     }
 }
