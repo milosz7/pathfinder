@@ -8,6 +8,7 @@ export const select = {
     finder: '#finder,',
     pathfinder: '.pathfinder-grid',
     messageBox: '.toast',
+    rules: '.rules',
   },
   nav: {
     links: '.nav__link',
@@ -18,6 +19,10 @@ export const select = {
     controlsButton: '.pathfinder-controls',
     messageTitle: '.pathfinder-message',
   },
+  rules: {
+    rulesDisplayButton: '.rules-button',
+    rulesHideButton: '.rules-hide',
+  },
   messageBox: {
     text: '.toast__text',
   }
@@ -26,6 +31,7 @@ export const select = {
 export const classNames = {
   page: {
     active: 'active',
+    blur: 'blur',
   },
   navLink: {
     active: 'active',
@@ -37,6 +43,9 @@ export const classNames = {
     shortest: 'shortest',
   },
   messageBox: {
+    active: 'active',
+  },
+  rulesBox: {
     active: 'active',
   },
 };
