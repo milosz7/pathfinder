@@ -9,6 +9,7 @@ export const select = {
     pathfinder: '.pathfinder-grid',
     messageBox: '.toast',
     rules: '.rules',
+    summary: '.summary',
   },
   nav: {
     links: '.nav__link',
@@ -21,7 +22,14 @@ export const select = {
   },
   rules: {
     rulesDisplayButton: '.rules-button',
-    rulesHideButton: '.rules-hide',
+  },
+  buttons: {
+    hideButton: '.btn-hide',
+  },
+  summary: {
+    routeLength: '.route-length',
+    pathsNumber: '.paths-number',
+    routeShortest: '.route-shortest',
   },
   messageBox: {
     text: '.toast__text',
@@ -47,6 +55,9 @@ export const classNames = {
     active: 'active',
   },
   rulesBox: {
+    active: 'active',
+  },
+  summary: {
     active: 'active',
   },
 };
