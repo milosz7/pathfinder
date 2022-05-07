@@ -60,7 +60,7 @@ class PathfinderThirdStage {
   findShortest() {
     for (let path in this.paths) {
       if (
-        (this.paths[path].length < this.shortestPath.length &&
+        (this.paths[path].length <= this.shortestPath.length &&
           this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) ||
         this.shortestPath.length === 0
       ) {
@@ -96,7 +96,6 @@ class PathfinderThirdStage {
   displaySummary() {
     document.body.classList.add(classNames.page.blur);
     this.summary.classList.add(classNames.summary.active);
-    console.log(this.shortestPath.length);
     const routeOutput = this.summary.querySelector(select.summary.routeLength);
     const pathsNumberOutput = this.summary.querySelector(select.summary.pathsNumber);
     const routeShortestOutput = this.summary.querySelector(select.summary.routeShortest);
