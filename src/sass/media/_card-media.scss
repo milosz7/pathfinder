@@ -51,3 +51,18 @@
   }
 }
 
+@media (max-width: 376px) {
+  .card__image {
+    height: 175px;
+    width: 250px;
+  }
+
+  .content__title {
+    @include text-format(1.25rem, 1, 700);
+  }
+
+  .content__subtitle {
+    @include text-format(0.8rem, 0, 400);
+  }
+}
+

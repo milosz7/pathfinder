@@ -37,3 +37,13 @@
     @include text-format(1rem, 2, 700);
   }
 }
+
+@media (max-width: 376px) {
+  .logo-title {
+    @include text-format(1.75rem, 5, 800);
+  }
+
+  .logo-subtitle {
+    @include text-format(0.8rem, 2, 700);
+  }
+}
