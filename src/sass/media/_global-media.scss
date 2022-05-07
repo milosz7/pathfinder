@@ -32,3 +32,17 @@
     z-index: 4;
   }
 }
+
+@media (max-width: 376px) {
+  .btn-primary {
+    @include text-format(0.6rem, 0, 700);
+    padding: $gutter * 0.5 $gutter;
+    display: flex;
+    max-width: 125px;
+    background : $clr-primary;
+    color: $clr-light;
+    text-transform: uppercase;
+    margin: 0 auto;
+    border: 0;
+  }
+}

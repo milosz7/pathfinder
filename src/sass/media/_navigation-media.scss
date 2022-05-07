@@ -1,0 +1,5 @@
+@media (max-width: 576px) {
+  .nav__link {
+    @include text-format(0.9rem, 1, 700);
+  }
+}
