@@ -35,19 +35,14 @@ class PathfinderThirdStage {
     const endPointY = this.endPoint[1];
     const startCell = this.getCell(this.startPoint);
     const adjacentCells = this.getAdjacent(startCell);
-    if (startCell.activeAdjacent !== 1) {
+    // if (startCell.activeAdjacent !== 1) {
       for (let i = 0; i < startCell.activeAdjacent; i++) {
         const testPath = [this.startPoint];
         testPath.push(adjacentCells[i]);
         this.initialPathID++;
         this.paths[`testPath${this.initialPathID}`] = testPath;
       }
-    } else {
-      const testPath = [this.startPoint];
-      testPath.push(adjacentCells[0]);
-      this.initialPathID++;
-      this.paths[`testPath${this.initialPathID}`] = testPath;
-    }
+    // }
     for(let path in this.paths) {
       if (!this.testIndex(endPointX, endPointY, this.paths[path])) {
         this.propagatePath(path, this.paths[path]);
