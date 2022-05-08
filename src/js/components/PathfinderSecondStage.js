@@ -4,14 +4,22 @@ import PathfinderThirdStage from './PathfinderThirdStage.js';
 
 class PathfinderSecondStage {
   constructor(data) {
-    this.wrapper = data.wrapper;
     this.route = data.route;
     this.cells = data.cells;
     this.getElements();
+    this.animateGrid();
     this.initActions();
   }
 
+  animateGrid() {
+    this.wrapper.classList.add(classNames.pathfinder.update);
+    setTimeout(() => {
+      this.wrapper.classList.remove(classNames.pathfinder.update);
+    },settings.pathfinder.gridReloadTime);
+  }
+
   getElements() {
+    this.wrapper = document.querySelector(select.containerOf.pathfinder);
     this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
     this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
@@ -59,6 +67,7 @@ class PathfinderSecondStage {
     this.wrapper.addEventListener('dblclick', initPoints);
     this.controlsButton.addEventListener('click', function handler() {
       if (thisPathfinder.selectedPoints.length === 2) {
+        thisPathfinder.animateGrid();
         thisPathfinder.confirmPoints(initPoints);
         this.removeEventListener('click', handler);
       } else if (thisPathfinder.selectedPoints.length !== 2) {

@@ -5,7 +5,7 @@ export const select = {
     nav: '.nav',
     pages: '#pages',
     about: '#about',
-    finder: '#finder,',
+    finder: '#finder',
     pathfinder: '.pathfinder-grid',
     messageBox: '.toast',
     rules: '.rules',
@@ -45,6 +45,7 @@ export const classNames = {
     active: 'active',
   },
   pathfinder: {
+    update: 'update',
     element: 'grid-element',
     active: 'active',
     startEnd: 'start-end',
@@ -73,6 +74,7 @@ export const settings = {
     minPathLength: 3,
     maxPointNumber: 2,
     pathGenerationLimit: 10,
+    gridReloadTime: 1000,
   },
   pathfinderMobile: {
     elementsAmountDefault: 36,

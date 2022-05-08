@@ -227,6 +227,7 @@ class Pathfinder {
 
   getElements() {
     const thisPathfinder = this;
+    thisPathfinder.container = document.querySelector(select.containerOf.finder);
     thisPathfinder.controlsButton = document.querySelector(select.pathfinder.controlsButton);
     thisPathfinder.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
@@ -234,7 +235,6 @@ class Pathfinder {
   finishDrawing(functionToRemove) {
     const thisPathfinder = this;
     const pathfinderData = {
-      wrapper: thisPathfinder.wrapper,
       route: thisPathfinder.route,
       cells: thisPathfinder.cells,
     };
