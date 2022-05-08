@@ -197,11 +197,7 @@ class Pathfinder {
     const posX = parseInt(element.getAttribute('pos-x'), 10);
     const posY = parseInt(element.getAttribute('pos-y'), 10);
     const thisPathfinder = this;
-    for (let cell of thisPathfinder.cells) {
-      if (cell.posX === posX && cell.posY === posY) {
-        return cell;
-      }
-    }
+    return posY !== 0 ? thisPathfinder.cells[`${posY}${posX}`] : thisPathfinder.cells[posX];
   }
 
   initActions() {

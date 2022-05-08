@@ -46,11 +46,7 @@ class PathfinderSecondStage {
   selectCell(element) {
     const posX = parseInt(element.getAttribute('pos-x'), 10);
     const posY = parseInt(element.getAttribute('pos-y'), 10);
-    for (let cell of this.cells) {
-      if (cell.posX === posX && cell.posY === posY) {
-        return cell;
-      }
-    }
+    return posY !== 0 ? this.cells[`${posY}${posX}`] : this.cells[posX];
   }
 
   initActions() {

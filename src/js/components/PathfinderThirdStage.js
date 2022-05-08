@@ -23,11 +23,7 @@ class PathfinderThirdStage {
   getCell(coordinates) {
     const posX = coordinates[0];
     const posY = coordinates[1];
-    for (let cell of this.cells) {
-      if (cell.posX === posX && cell.posY === posY) {
-        return cell;
-      }
-    }
+    return posY !== 0 ? this.cells[`${posY}${posX}`] : this.cells[posX];
   }
 
   initPaths() {
@@ -35,14 +31,12 @@ class PathfinderThirdStage {
     const endPointY = this.endPoint[1];
     const startCell = this.getCell(this.startPoint);
     const adjacentCells = this.getAdjacent(startCell);
-    // if (startCell.activeAdjacent !== 1) {
-      for (let i = 0; i < startCell.activeAdjacent; i++) {
-        const testPath = [this.startPoint];
-        testPath.push(adjacentCells[i]);
-        this.initialPathID++;
-        this.paths[`testPath${this.initialPathID}`] = testPath;
-      }
-    // }
+    for (let i = 0; i < startCell.activeAdjacent; i++) {
+      const testPath = [this.startPoint];
+      testPath.push(adjacentCells[i]);
+      this.initialPathID++;
+      this.paths[`testPath${this.initialPathID}`] = testPath;
+    }
     for(let path in this.paths) {
       if (!this.testIndex(endPointX, endPointY, this.paths[path])) {
         this.propagatePath(path, this.paths[path]);
@@ -77,6 +71,7 @@ class PathfinderThirdStage {
       cellToActivate.classList.add(classNames.pathfinder.shortest);
     }
     this.displaySummary();
+    console.log(this.paths);
     this.controlsButton.addEventListener('click', () => {
       const reset = new CustomEvent('reset', {
         bubbles: true,
