@@ -39,6 +39,7 @@ body {
     width: 100%;
     background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
     z-index: 2;
+    animation: display-popup 1s forwards ease-in;
   }
 }
 
