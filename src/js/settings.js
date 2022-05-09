@@ -75,6 +75,7 @@ export const settings = {
     maxPointNumber: 2,
     pathGenerationLimit: 10,
     gridReloadTime: 1000,
+    cellMarkupDelay: 100,
   },
   pathfinderMobile: {
     elementsAmountDefault: 36,
@@ -83,6 +84,9 @@ export const settings = {
   },
   messageBox: {
     displayTime: 3000,
+  },
+  summary: {
+    popupDelay: 300,
   },
 };
 
