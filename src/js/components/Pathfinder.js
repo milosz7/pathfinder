@@ -9,62 +9,55 @@ class Pathfinder {
     thisPathfinder.wrapper = wrapper;
     thisPathfinder.cells = [];
     thisPathfinder.route = [];
+    thisPathfinder.decideCellsAmount();
     thisPathfinder.createElements();
     thisPathfinder.getElements();
     thisPathfinder.initActions();
   }
 
+  decideCellsAmount() {
+    if (helpers.isMobile()) {
+      this.elementsInRow = settings.pathfinderMobile.elementsInRow;
+      this.coordinateLimitDefault = settings.pathfinderMobile.coordinateLimitDefault;
+      this.elementsAmount = settings.pathfinderMobile.elementsAmountDefault;
+    } else {
+      this.elementsInRow = settings.pathfinder.elementsInRow;
+      this.coordinateLimitDefault = settings.pathfinder.coordinateLimitDefault;
+      this.elementsAmount = settings.pathfinder.elementsAmountDefault;
+    }
+  }
+
   createElements() {
-    const thisPathfinder = this;
     let posX = 0;
     let posY = 0;
-    if (helpers.isMobile()) {
-      for (let i = 0; i < settings.pathfinderMobile.elementsAmountDefault; i++) {
-        const gridElement = document.createElement('div');
-        gridElement.style.flexBasis = `${100 / settings.pathfinderMobile.elementsInRow}%`;
-        const cell = new PathfinderCell(gridElement, posX, posY);
-        thisPathfinder.cells.push(cell);
-        if (posX % settings.pathfinderMobile.coordinateLimitDefault === 0 && posX !== 0) {
-          posY++;
-          posX = 0;
-        } else {
-          posX++;
-        }
-        thisPathfinder.wrapper.appendChild(gridElement);
+    for (let i = 0; i < this.elementsAmount; i++) {
+      const gridElement = document.createElement('div');
+      gridElement.style.flexBasis = `${100 / this.elementsInRow}%`;
+      const cell = new PathfinderCell(gridElement, posX, posY);
+      this.cells.push(cell);
+      if (posX % this.coordinateLimitDefault === 0 && posX !== 0) {
+        posY++;
+        posX = 0;
+      } else {
+        posX++;
       }
-    } else {
-      for (let i = 0; i < settings.pathfinder.elementsAmountDefault; i++) {
-        const gridElement = document.createElement('div');
-        gridElement.style.flexBasis = `${100 / settings.pathfinder.elementsInRow}%`;
-        const cell = new PathfinderCell(gridElement, posX, posY);
-        thisPathfinder.cells.push(cell);
-        if (posX % settings.pathfinder.coordinateLimitDefault === 0 && posX !== 0) {
-          posY++;
-          posX = 0;
-        } else {
-          posX++;
-        }
-        thisPathfinder.wrapper.appendChild(gridElement);
-      }
+      this.wrapper.appendChild(gridElement);
     }
-  
   }
 
   selectPath(cell) {
-    const thisPathfinder = this;
     const clickedCoordinates = [];
-    thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
+    this.generateElemData(cell, cell.posX, cell.posY);
     clickedCoordinates.push(cell.posX, cell.posY);
     cell.wrapper.classList.toggle(
       classNames.pathfinder.active,
-      thisPathfinder.toggleStatus(clickedCoordinates, cell)
+      this.toggleStatus(clickedCoordinates, cell)
     );
-    thisPathfinder.markClickable();
+    this.markClickable();
   }
 
   toggleStatus(coordinates, cell) {
-    const thisPathfinder = this;
-    const path = thisPathfinder.route;
+    const path = this.route;
     const posX = cell.posX;
     const posY = cell.posY;
     if (!cell.wrapper.classList.contains(classNames.pathfinder.active)) {
@@ -80,48 +73,48 @@ class Pathfinder {
         return true;
       }
     } else {
-      const testPath = (thisPathfinder.testPath = []);
+      const testPath = (this.testPath = []);
       const routeID = settings.pathfinder.routeID;
       const testPathID = settings.pathfinder.testPathID;
-      const notIncluded = !thisPathfinder.testIndex(coordinates[0], coordinates[1], testPathID);
-      path.splice(thisPathfinder.getIndex(posX, posY, routeID), 1);  
+      const notIncluded = !this.testIndex(coordinates[0], coordinates[1], testPathID);
+      path.splice(this.getIndex(posX, posY, routeID), 1);  
       for (let coordinates of path) {
         if (testPath.length === 0) {
           testPath.push(coordinates);
         } else if (
           (notIncluded &&
-            thisPathfinder.testIndex(coordinates[0] + 1, coordinates[1], testPathID)) ||
+            this.testIndex(coordinates[0] + 1, coordinates[1], testPathID)) ||
           (notIncluded &&
-            thisPathfinder.testIndex(coordinates[0]  - 1, coordinates[1], testPathID)) ||
+            this.testIndex(coordinates[0]  - 1, coordinates[1], testPathID)) ||
           (notIncluded &&
-            thisPathfinder.testIndex(coordinates[0] , coordinates[1] + 1, testPathID)) ||
+            this.testIndex(coordinates[0] , coordinates[1] + 1, testPathID)) ||
           (notIncluded &&
-            thisPathfinder.testIndex(coordinates[0] , coordinates[1] - 1, testPathID))
+            this.testIndex(coordinates[0] , coordinates[1] - 1, testPathID))
         ) {
           testPath.push(coordinates);
         }
         for (let coordinates of testPath) {
           if (
-            thisPathfinder.testIndex(coordinates[0] + 1, coordinates[1], routeID) &&
-            !thisPathfinder.testIndex(coordinates[0] + 1, coordinates[1], testPathID)
+            this.testIndex(coordinates[0] + 1, coordinates[1], routeID) &&
+            !this.testIndex(coordinates[0] + 1, coordinates[1], testPathID)
           ) {
             testPath.push([coordinates[0] + 1, coordinates[1]]);
           }
           if (
-            thisPathfinder.testIndex(coordinates[0] - 1, coordinates[1], routeID) &&
-            !thisPathfinder.testIndex(coordinates[0] - 1, coordinates[1], testPathID)
+            this.testIndex(coordinates[0] - 1, coordinates[1], routeID) &&
+            !this.testIndex(coordinates[0] - 1, coordinates[1], testPathID)
           ) {
             testPath.push([coordinates[0] - 1, coordinates[1]]);
           }
           if (
-            thisPathfinder.testIndex(coordinates[0], coordinates[1] + 1, routeID) &&
-            !thisPathfinder.testIndex(coordinates[0], coordinates[1] + 1, testPathID)
+            this.testIndex(coordinates[0], coordinates[1] + 1, routeID) &&
+            !this.testIndex(coordinates[0], coordinates[1] + 1, testPathID)
           ) {
             testPath.push([coordinates[0], coordinates[1] + 1]);
           }
           if (
-            thisPathfinder.testIndex(coordinates[0], coordinates[1] - 1, routeID) &&
-            !thisPathfinder.testIndex(coordinates[0], coordinates[1] - 1, testPathID)
+            this.testIndex(coordinates[0], coordinates[1] - 1, routeID) &&
+            !this.testIndex(coordinates[0], coordinates[1] - 1, testPathID)
           ) {
             testPath.push([coordinates[0], coordinates[1] - 1]);
           }
@@ -138,9 +131,8 @@ class Pathfinder {
   }
 
   markClickable() {
-    const thisPathfinder = this;
-    for (let cell of thisPathfinder.cells) {
-      thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
+    for (let cell of this.cells) {
+      this.generateElemData(cell, cell.posX, cell.posY);
       if (cell.activeAdjacent > 0) {
         cell.wrapper.classList.toggle(
           classNames.pathfinder.clickable,
@@ -153,8 +145,7 @@ class Pathfinder {
   }
 
   getIndex(posX, posY, pathArr) {
-    const thisPathfinder = this;
-    const path = thisPathfinder[pathArr];
+    const path = this[pathArr];
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
         return path.indexOf(routeCoordinates);
@@ -162,9 +153,8 @@ class Pathfinder {
     }
   }
 
-  testIndex(posX, posY, pathArr) {//scalić
-    const thisPathfinder = this;
-    const path = thisPathfinder[pathArr];
+  testIndex(posX, posY, pathArr) {
+    const path = this[pathArr];
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
         return true;
@@ -174,7 +164,6 @@ class Pathfinder {
   }
 
   generateElemData(cell, posX, posY) {
-    const thisPathfinder = this;
     cell.activeAdjacent = 0;
     const adjacencySelectors = {
       top: `[pos-x="${posX}"][pos-y="${posY - 1}"]`,
@@ -183,7 +172,7 @@ class Pathfinder {
       right: `[pos-x="${posX + 1}"][pos-y="${posY}"]`,
     };
     for (let selector in adjacencySelectors) {
-      const selectedElement = thisPathfinder.wrapper.querySelector(adjacencySelectors[selector]);
+      const selectedElement = this.wrapper.querySelector(adjacencySelectors[selector]);
       if (
         selectedElement !== null &&
         selectedElement.classList.contains(classNames.pathfinder.active)
@@ -196,8 +185,7 @@ class Pathfinder {
   selectCell(element) {
     const posX = parseInt(element.getAttribute('pos-x'), 10);
     const posY = parseInt(element.getAttribute('pos-y'), 10);
-    const thisPathfinder = this;
-    return posY !== 0 ? thisPathfinder.cells[`${posY}${posX}`] : thisPathfinder.cells[posX];
+    return this.cells[posY * this.elementsInRow + posX];
   }
 
   initActions() {
@@ -222,27 +210,28 @@ class Pathfinder {
   }
 
   getElements() {
-    const thisPathfinder = this;
-    thisPathfinder.container = document.querySelector(select.containerOf.finder);
-    thisPathfinder.controlsButton = document.querySelector(select.pathfinder.controlsButton);
-    thisPathfinder.titleMessage = document.querySelector(select.pathfinder.messageTitle);
+    this.container = document.querySelector(select.containerOf.finder);
+    this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
+    this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
   }
 
   finishDrawing(functionToRemove) {
-    const thisPathfinder = this;
     const pathfinderData = {
-      route: thisPathfinder.route,
-      cells: thisPathfinder.cells,
+      route: this.route,
+      cells: this.cells,
+      elementsInRow: this.elementsInRow,
+      coordinateLimitDefault: this.coordinateLimitDefault,
+      elementsAmount: this.elementsAmount,
     };
-    for (let cell of thisPathfinder.cells) {
-      thisPathfinder.generateElemData(cell, cell.posX, cell.posY);
+    for (let cell of this.cells) {
+      this.generateElemData(cell, cell.posX, cell.posY);
       if (cell.wrapper.classList.contains(classNames.pathfinder.clickable)) {
         cell.wrapper.classList.remove(classNames.pathfinder.clickable);
       }
     }
-    thisPathfinder.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
-    thisPathfinder.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
-    thisPathfinder.wrapper.removeEventListener('click', functionToRemove);
+    this.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
+    this.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
+    this.wrapper.removeEventListener('click', functionToRemove);
     new PathfinderSecondStage(pathfinderData);
   }
 }
