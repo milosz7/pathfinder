@@ -1,4 +1,4 @@
-import {select, classNames, settings} from './settings.js';
+import {select, classNames} from './settings.js';
 import Pathfinder from './components/Pathfinder.js';
 
 const app = {
@@ -51,10 +51,6 @@ const app = {
 
   initReset: function() {
     this.wrapper.addEventListener('reset', () => {
-      this.wrapper.classList.add(classNames.pathfinder.update);
-      setTimeout(() => {
-        this.wrapper.classList.remove(classNames.pathfinder.update);
-      },settings.pathfinder.gridReloadTime);
       this.wrapper.innerHTML = '';
       this.pathfinder = new Pathfinder(this.wrapper);
     });
