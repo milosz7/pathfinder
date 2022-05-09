@@ -13,6 +13,7 @@
   display: none;
 
   &.active {
+    animation: display-popup 1s forwards ease-in;
     display: block;
   }
 
