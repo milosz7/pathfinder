@@ -6,6 +6,9 @@ class PathfinderSecondStage {
   constructor(data) {
     this.route = data.route;
     this.cells = data.cells;
+    this.elementsInRow = data.elementsInRow;
+    this.coordinateLimitDefault = data.coordinateLimitDefault;
+    this.elementsAmount = data.elementsAmount;
     this.getElements();
     this.animateGrid();
     this.initActions();
@@ -46,7 +49,7 @@ class PathfinderSecondStage {
   selectCell(element) {
     const posX = parseInt(element.getAttribute('pos-x'), 10);
     const posY = parseInt(element.getAttribute('pos-y'), 10);
-    return posY !== 0 ? this.cells[`${posY}${posX}`] : this.cells[posX];
+    return this.cells[posY * this.elementsInRow + posX];
   }
 
   initActions() {
@@ -63,7 +66,6 @@ class PathfinderSecondStage {
     this.wrapper.addEventListener('dblclick', initPoints);
     this.controlsButton.addEventListener('click', function handler() {
       if (thisPathfinder.selectedPoints.length === 2) {
-        thisPathfinder.animateGrid();
         thisPathfinder.confirmPoints(initPoints);
         this.removeEventListener('click', handler);
       } else if (thisPathfinder.selectedPoints.length !== 2) {
@@ -99,6 +101,9 @@ class PathfinderSecondStage {
       selectedPoints: this.selectedPoints,
       route: this.route,
       cells: this.cells,
+      elementsInRow: this.elementsInRow,
+      coordinateLimitDefault: this.coordinateLimitDefault,
+      elementsAmount: this.elementsAmount,
     };
     this.controlsButton.innerHTML = textMessages.pathfinder.result.btnText;
     this.titleMessage.innerHTML = textMessages.pathfinder.result.title;

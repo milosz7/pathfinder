@@ -5,6 +5,9 @@ class PathfinderThirdStage {
     this.route = data.route;
     this.startPoint = data.selectedPoints[0];
     this.endPoint = data.selectedPoints[1];
+    this.elementsInRow = data.elementsInRow;
+    this.coordinateLimitDefault = data.coordinateLimitDefault;
+    this.elementsAmount = data.elementsAmount;
     this.shortestPath = [];
     this.cells = data.cells;
     this.paths = {};
@@ -23,7 +26,7 @@ class PathfinderThirdStage {
   getCell(coordinates) {
     const posX = coordinates[0];
     const posY = coordinates[1];
-    return posY !== 0 ? this.cells[`${posY}${posX}`] : this.cells[posX];
+    return this.cells[posY * this.elementsInRow + posX];
   }
 
   initPaths() {
@@ -68,9 +71,13 @@ class PathfinderThirdStage {
   markShortest() {
     for (let coordinates of this.shortestPath) {
       const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
-      cellToActivate.classList.add(classNames.pathfinder.shortest);
+      setTimeout(() => {
+        cellToActivate.classList.add(classNames.pathfinder.shortest);
+      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.indexOf(coordinates));
     }
-    this.displaySummary();
+    setTimeout(() => {
+      this.displaySummary();
+    }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length + settings.summary.popupDelay);
     console.log(this.paths);
     this.controlsButton.addEventListener('click', () => {
       const reset = new CustomEvent('reset', {
