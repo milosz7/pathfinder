@@ -10,6 +10,18 @@
   height: 100px;
   cursor: pointer;
 
+  &__arrow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s;
+
+    &.active {
+      animation: display-popup 0.3s ease-in-out alternate-reverse forwards;
+    }
+  }
+
   &.display {
     display: block;
     animation: display-popup 0.3s ease-in-out forwards;

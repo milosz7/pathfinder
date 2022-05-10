@@ -74,7 +74,7 @@ const app = {
     this.sideMenuButton = document.querySelector(select.sideMenu.button);
     this.sideMenuControls = document.querySelector(select.sideMenu.controls);
     this.sideMenuTitle = document.querySelector(select.sideMenu.title);
-    
+
     this.rulesButton.addEventListener('click', () => {
       document.body.classList.add(classNames.page.blur);
       rulesBox.classList.add(classNames.rulesBox.active);
@@ -89,6 +89,8 @@ const app = {
       if (!e.target.closest(select.sideMenu.controls)) {
         this.sideMenuControls.classList.toggle(classNames.sideNav.active);
         this.sideMenuTitle.classList.toggle(classNames.sideNav.active);
+        const arrow = this.sideMenuButton.querySelector(select.sideMenu.arrow);
+        arrow.classList.toggle(classNames.sideNav.active);
         this.sideMenuButton.classList.toggle(
           classNames.sideNav.hide,
           this.sideMenuButton.classList.contains(classNames.sideNav.active)

@@ -30,6 +30,7 @@ export const select = {
     button: '.side-nav',
     controls: '.side-nav .buttons-box',
     title: '.side-nav__title',
+    arrow: '.side-nav__arrow',
   },
   summary: {
     routeLength: '.route-length',
