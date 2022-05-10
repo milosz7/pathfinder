@@ -53,6 +53,17 @@ const app = {
     this.wrapper.addEventListener('reset', () => {
       this.wrapper.innerHTML = '';
       this.pathfinder = new Pathfinder(this.wrapper);
+      this.sideMenuButton.classList.toggle(
+        classNames.sideNav.hide,
+        this.sideMenuButton.classList.contains(classNames.sideNav.active)
+      );
+      this.sideMenuButton.classList.toggle(
+        classNames.sideNav.active,
+        this.sideMenuButton.classList.contains(classNames.sideNav.hide)
+      );
+      this.sideMenuControls.classList.remove(classNames.sideNav.active);
+      this.sideMenuTitle.classList.remove(classNames.sideNav.active);
+      this.sideMenuButton.className = classNames.sideNav.containerClass;
     });
   },
 
@@ -60,6 +71,10 @@ const app = {
     const rulesBox = document.querySelector(select.containerOf.rules);
     this.rulesButton = document.querySelector(select.rules.rulesDisplayButton);
     this.rulesHideButtons = document.querySelectorAll(select.buttons.hideButton);
+    this.sideMenuButton = document.querySelector(select.sideMenu.button);
+    this.sideMenuControls = document.querySelector(select.sideMenu.controls);
+    this.sideMenuTitle = document.querySelector(select.sideMenu.title);
+    
     this.rulesButton.addEventListener('click', () => {
       document.body.classList.add(classNames.page.blur);
       rulesBox.classList.add(classNames.rulesBox.active);
@@ -70,6 +85,21 @@ const app = {
         button.parentElement.classList.remove(classNames.rulesBox.active);
       });
     }
+    this.sideMenuButton.addEventListener('click', (e) => {
+      if (!e.target.closest(select.sideMenu.controls)) {
+        this.sideMenuControls.classList.toggle(classNames.sideNav.active);
+        this.sideMenuTitle.classList.toggle(classNames.sideNav.active);
+        this.sideMenuButton.classList.toggle(
+          classNames.sideNav.hide,
+          this.sideMenuButton.classList.contains(classNames.sideNav.active)
+        );
+        this.sideMenuButton.classList.toggle(
+          classNames.sideNav.active,
+          !this.sideMenuButton.classList.contains(classNames.sideNav.hide)
+        );
+      }
+      
+    });
   }
 };
 
