@@ -1,0 +1,48 @@
+.side-nav {
+  position: fixed;
+  right: 0;
+  display: none;
+  top: 100px;
+  background-color: $clr-primary;
+  text-align: right;
+  padding: $gutter;
+  max-width: 10px;
+  height: 100px;
+  cursor: pointer;
+
+  &.display {
+    display: block;
+    animation: display-popup 0.3s ease-in-out forwards;
+  }
+
+  &.active{
+    animation: slide-in 0.75s ease-in-out alternate forwards;
+  }
+
+  &.hide {
+    animation: slide-out 0.75s ease-in-out alternate-reverse forwards;
+  }
+
+  &__title {
+    opacity: 0;
+
+    &.active {
+      animation: display-popup 0.3s ease-in-out forwards 0.75s;
+    }
+  }
+
+  .buttons-box {
+    display: none;
+    opacity: 0;
+
+    &.active {
+      display: block;
+      animation: display-popup 0.3s ease-in-out forwards 0.75s;
+    }
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: $gutter $gutter * 2;
+  }
+}
