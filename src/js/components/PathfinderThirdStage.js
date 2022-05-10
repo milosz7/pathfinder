@@ -14,6 +14,7 @@ class PathfinderThirdStage {
     this.initialPathID = 0;
     this.getElements();
     this.initPaths();
+    this.switchPathInit();
   }
 
   getElements() {
@@ -21,6 +22,8 @@ class PathfinderThirdStage {
     this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
     this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
     this.summary = document.querySelector(select.containerOf.summary);
+    this.sideMenuControls = document.querySelector(select.sideMenu.controls).children;
+    this.sideMenuClickable = document.querySelector(select.sideMenu.button);
   }
 
   getCell(coordinates) {
@@ -43,7 +46,7 @@ class PathfinderThirdStage {
     for(let path in this.paths) {
       if (!this.testIndex(endPointX, endPointY, this.paths[path])) {
         this.propagatePath(path, this.paths[path]);
-      } else {
+      } else if (this.paths[path].length === 2 && this.testIndex(endPointX, endPointY, this.paths[path])) {
         this.findShortest();
       }
     }
@@ -58,6 +61,14 @@ class PathfinderThirdStage {
       ) {
         this.shortestPath = this.paths[path];
       }
+    }
+    this.removeUnnecessaryPaths();
+    this.shortestPath = this.paths[Object.keys(this.paths)[0]];
+    this.initReset();
+  }
+
+  removeUnnecessaryPaths() {
+    for (let path in this.paths) {
       if (
         this.paths[path].length !== this.shortestPath.length ||
         !this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])
@@ -65,20 +76,13 @@ class PathfinderThirdStage {
         delete this.paths[path];
       }
     }
-    this.markShortest();
   }
 
-  markShortest() {
-    for (let coordinates of this.shortestPath) {
-      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
-      setTimeout(() => {
-        cellToActivate.classList.add(classNames.pathfinder.shortest);
-      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.indexOf(coordinates));
-    }
+  initReset() {
+    this.displayShortest();  
     setTimeout(() => {
       this.displaySummary();
     }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length + settings.summary.popupDelay);
-    console.log(this.paths);
     this.controlsButton.addEventListener('click', () => {
       const reset = new CustomEvent('reset', {
         bubbles: true,
@@ -86,7 +90,79 @@ class PathfinderThirdStage {
       this.controlsButton.textContent = textMessages.pathfinder.drawing.btnText;
       this.titleMessage.textContent = textMessages.pathfinder.drawing.title;
       this.controlsButton.replaceWith(this.controlsButton.cloneNode(true));
+      for (let button of this.sideMenuControls) {
+        button.replaceWith(button.cloneNode(true));
+      }
       this.wrapper.dispatchEvent(reset);
+    });
+  }
+
+  displayShortest() {
+    for (let coordinates of this.shortestPath) {
+      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
+      setTimeout(() => {
+        cellToActivate.classList.toggle(classNames.pathfinder.shortest);
+      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.indexOf(coordinates));
+    }
+  }
+
+  switchPath(path) {
+    for (let i = 1; i < path.length - 1; i++) {
+      const coordinates = path[i];
+      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
+      setTimeout(() => {
+        cellToActivate.classList.toggle(classNames.pathfinder.shortest);
+      }, settings.pathfinder.cellMarkupDelay * path.indexOf(coordinates));
+    }
+  }
+
+  switchPathInit() {
+    const buttonPrev = this.sideMenuControls[0];
+    const buttonNext = this.sideMenuControls[1];
+    console.log(this.sideMenuControls);
+    const pathKeys = Object.keys(this.paths);
+    this.currentPathIndex = 0;
+    buttonPrev.addEventListener('click', () => {
+      for (let button of this.sideMenuControls) {
+        button.disabled = true;
+      }
+      let oldIndex = this.currentPathIndex;
+      if (this.currentPathIndex === 0) {
+        this.currentPathIndex = pathKeys.length - 1;
+        oldIndex = 0;
+      } else {
+        oldIndex = this.currentPathIndex--;
+      }
+      this.switchPath(this.paths[pathKeys[oldIndex]]);
+      setTimeout(() => {
+        this.switchPath(this.paths[pathKeys[this.currentPathIndex]]);
+      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length);
+      setTimeout(() => {
+        for (let button of this.sideMenuControls) {
+          button.disabled = false;
+        }
+      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length * 2);
+    });
+    buttonNext.addEventListener('click', () => {
+      for (let button of this.sideMenuControls) {
+        button.disabled = true;
+      }
+      let oldIndex = this.currentPathIndex;
+      if (this.currentPathIndex === pathKeys.length - 1) {
+        this.currentPathIndex = 0;
+        oldIndex = pathKeys.length - 1;
+      } else {
+        oldIndex = this.currentPathIndex++;
+      }
+      this.switchPath(this.paths[pathKeys[oldIndex]]);
+      setTimeout(() => {
+        this.switchPath(this.paths[pathKeys[this.currentPathIndex]]);
+      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length);
+      setTimeout(() => {
+        for (let button of this.sideMenuControls) {
+          button.disabled = false;
+        }
+      }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length * 2);
     });
   }
 
@@ -99,6 +175,7 @@ class PathfinderThirdStage {
     routeOutput.innerHTML = this.route.length;
     pathsNumberOutput.innerHTML = Object.keys(this.paths).length;
     routeShortestOutput.innerHTML = this.shortestPath.length;
+    this.sideMenuClickable.classList.toggle(classNames.sideNav.display, Object.keys(this.paths).length > 1);
   }
 
   checkPaths(endPointX, endPointY) {
@@ -182,13 +259,15 @@ class PathfinderThirdStage {
     const pathsData = this.checkPaths(this.endPoint[0], this.endPoint[1]);
     const unfinishedPaths = pathsData[1];
     const finishedPaths = pathsData[0];
-    for(let path in this.paths) {
-      if (finishedPaths >= settings.pathfinder.pathGenerationLimit || unfinishedPaths === 0) {
-        this.findShortest();
-      } else if (!this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
-        this.propagatePath(path, this.paths[path]);
+    if (finishedPaths >= settings.pathfinder.pathGenerationLimit || unfinishedPaths === 0) {
+      this.findShortest();
+    } else {
+      for(let path in this.paths) {
+        if (!this.testIndex(this.endPoint[0], this.endPoint[1], this.paths[path])) {
+          this.propagatePath(path, this.paths[path]);
+        }
       }
-    }
+    }  
   }
 
   testIndex(posX, posY, path) {
