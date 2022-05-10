@@ -35,3 +35,24 @@
     opacity: 1;
   }
 }
+
+//side-nav slide
+@keyframes slide-in {
+  0% {
+    max-width: 10px;
+  }
+
+  100% {
+    max-width: 200px;
+  }
+}
+
+@keyframes slide-out {
+  100% {
+    max-width: 200px;
+  }
+
+  0% {
+    max-width: 10px;
+  }
+}
