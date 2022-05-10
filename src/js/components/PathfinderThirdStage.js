@@ -119,7 +119,6 @@ class PathfinderThirdStage {
   switchPathInit() {
     const buttonPrev = this.sideMenuControls[0];
     const buttonNext = this.sideMenuControls[1];
-    console.log(this.sideMenuControls);
     const pathKeys = Object.keys(this.paths);
     this.currentPathIndex = 0;
     buttonPrev.addEventListener('click', () => {
