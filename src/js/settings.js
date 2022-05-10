@@ -66,6 +66,12 @@ export const classNames = {
   summary: {
     active: 'active',
   },
+  sideNav: {
+    containerClass: 'side-nav',
+    active: 'active',
+    display: 'display',
+    hide: 'hide',
+  }
 };
 
 export const settings = {
