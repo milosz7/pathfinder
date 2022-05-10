@@ -26,6 +26,11 @@ export const select = {
   buttons: {
     hideButton: '.btn-hide',
   },
+  sideMenu: {
+    button: '.side-nav',
+    controls: '.side-nav .buttons-box',
+    title: '.side-nav__title',
+  },
   summary: {
     routeLength: '.route-length',
     pathsNumber: '.paths-number',
