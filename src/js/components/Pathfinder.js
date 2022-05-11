@@ -5,14 +5,13 @@ import PathfinderSecondStage from './PathfinderSecondStage.js';
 
 class Pathfinder {
   constructor(wrapper) {
-    const thisPathfinder = this;
-    thisPathfinder.wrapper = wrapper;
-    thisPathfinder.cells = [];
-    thisPathfinder.route = [];
-    thisPathfinder.decideCellsAmount();
-    thisPathfinder.createElements();
-    thisPathfinder.getElements();
-    thisPathfinder.initActions();
+    this.wrapper = wrapper;
+    this.cells = [];
+    this.route = [];
+    this.decideCellsAmount();
+    this.createElements();
+    this.getElements();
+    this.initActions();
   }
 
   decideCellsAmount() {
