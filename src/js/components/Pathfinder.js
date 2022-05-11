@@ -188,25 +188,28 @@ class Pathfinder {
     return this.cells[posY * this.elementsInRow + posX];
   }
 
+  handler = (initCells) => {
+    if (this.route.length >= settings.pathfinder.minPathLength) {
+      this.finishDrawing(initCells);
+      this.controlsButton.removeEventListener('click', this.handlerWithInitCells);
+    } else {
+      helpers.displayMessage(textMessages.errors.pathTooShort);
+    }
+  };
+
   initActions() {
-    const thisPathfinder = this;
-    const initCells = function(e) {
+    const initCells = (e) => {
       if (e.target.closest(select.pathfinder.element)) {
-        const clickedCell = thisPathfinder.selectCell(e.target.closest(select.pathfinder.element));
-        thisPathfinder.selectPath(clickedCell);
+        const clickedCell = this.selectCell(e.target.closest(select.pathfinder.element));
+        this.selectPath(clickedCell);
       }
     };
-    thisPathfinder.wrapper.addEventListener('click', initCells);
-    thisPathfinder.controlsButton.addEventListener('click', function handler() {
-      const path = thisPathfinder.route;
-      if (path.length >= settings.pathfinder.minPathLength) {
-        thisPathfinder.finishDrawing(initCells);
-        this.removeEventListener('click', handler);
-      } else {
-        helpers.displayMessage(textMessages.errors.pathTooShort);
-      }
-      
-    });
+    this.handlerWithInitCells = () => {
+      this.handler(initCells);
+      console.log('test1');
+    };
+    this.wrapper.addEventListener('click', initCells);
+    this.controlsButton.addEventListener('click', this.handlerWithInitCells);
   }
 
   getElements() {

@@ -201,9 +201,8 @@ class PathfinderThirdStage {
   }
 
   reduceAdjacent(adjacentCells, pathArr) {
-    const thisPath = this;
-    const reducedAdjacent = adjacentCells.reduce(function(uniqueCoordinates, coordinateToCheck) {
-      if(!thisPath.testIndex(coordinateToCheck[0], coordinateToCheck[1], pathArr))  {
+    const reducedAdjacent = adjacentCells.reduce((uniqueCoordinates, coordinateToCheck) => {
+      if(!this.testIndex(coordinateToCheck[0], coordinateToCheck[1], pathArr))  {
         uniqueCoordinates.push(coordinateToCheck); 
       }
       return uniqueCoordinates;

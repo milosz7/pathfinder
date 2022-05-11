@@ -52,27 +52,31 @@ class PathfinderSecondStage {
     return this.cells[posY * this.elementsInRow + posX];
   }
 
+  handler = (initPoints) => {
+    if (this.selectedPoints.length === 2) {
+      this.confirmPoints(initPoints);
+      this.controlsButton.removeEventListener('click', this.handlerWithInitPoints);
+    } else if (this.selectedPoints.length !== 2) {
+      helpers.displayMessage(textMessages.errors.choosePoints);
+    }
+  };
+
   initActions() {
-    const thisPathfinder = this;
     this.selectedPoints = [];
-    const initPoints = function (e) {
+    const initPoints = (e) => {
       if (e.target.closest(select.pathfinder.elementActive)) {
-        const clickedCell = thisPathfinder.selectCell(e.target.closest(select.pathfinder.elementActive));
-        thisPathfinder.selectPoint(clickedCell);
+        const clickedCell = this.selectCell(e.target.closest(select.pathfinder.elementActive));
+        this.selectPoint(clickedCell);
       } else if (e.target.closest(select.pathfinder.element)) {
         helpers.displayMessage(textMessages.errors.notInRoute);
       }
     };
+    this.handlerWithInitPoints = () => {
+      console.log('test2');
+      this.handler(initPoints);
+    };
     this.wrapper.addEventListener('dblclick', initPoints);
-    this.controlsButton.addEventListener('click', function handler() {
-      if (thisPathfinder.selectedPoints.length === 2) {
-        thisPathfinder.confirmPoints(initPoints);
-        this.removeEventListener('click', handler);
-      } else if (thisPathfinder.selectedPoints.length !== 2) {
-        helpers.displayMessage(textMessages.errors.choosePoints);
-      }
-      
-    });
+    this.controlsButton.addEventListener('click', this.handlerWithInitPoints);
   }
 
   selectPoint(cell) {
