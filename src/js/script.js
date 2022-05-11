@@ -61,6 +61,8 @@ const app = {
         classNames.sideNav.active,
         this.sideMenuButton.classList.contains(classNames.sideNav.hide)
       );
+      const arrow = this.sideMenuButton.querySelector(select.sideMenu.arrow);
+      arrow.classList.remove(classNames.sideNav.active)
       this.sideMenuControls.classList.remove(classNames.sideNav.active);
       this.sideMenuTitle.classList.remove(classNames.sideNav.active);
       this.sideMenuButton.className = classNames.sideNav.containerClass;
