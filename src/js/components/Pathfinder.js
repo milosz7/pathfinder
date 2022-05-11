@@ -206,7 +206,6 @@ class Pathfinder {
     };
     this.handlerWithInitCells = () => {
       this.handler(initCells);
-      console.log('test1');
     };
     this.wrapper.addEventListener('click', initCells);
     this.controlsButton.addEventListener('click', this.handlerWithInitCells);

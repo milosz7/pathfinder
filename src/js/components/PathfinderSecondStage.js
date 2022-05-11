@@ -72,7 +72,6 @@ class PathfinderSecondStage {
       }
     };
     this.handlerWithInitPoints = () => {
-      console.log('test2');
       this.handler(initPoints);
     };
     this.wrapper.addEventListener('dblclick', initPoints);
