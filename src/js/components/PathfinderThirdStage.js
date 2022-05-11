@@ -50,7 +50,7 @@ class PathfinderThirdStage {
     for(let path in this.paths) {
       if (!this.testIndex(endPointX, endPointY, this.paths[path])) {
         this.propagatePath(path, this.paths[path]);
-      } else {
+      } else if(this.testIndex(endPointX, endPointY, this.paths[path]) && this.paths[path].length === 2){
         this.findShortest();
       }
     }
@@ -69,6 +69,7 @@ class PathfinderThirdStage {
   }
 
   markShortest() {
+    console.log('123');
     for (let coordinates of this.shortestPath) {
       const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
       cellToActivate.classList.add(classNames.pathfinder.shortest);

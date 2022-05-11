@@ -26,6 +26,7 @@
   .logo-title {
     @include text-format(2rem, 5, 800);
   }
+
   .logo-subtitle {
     @include text-format(1rem, 2, 700);
   }

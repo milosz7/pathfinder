@@ -170,26 +170,30 @@ class Pathfinder {
     }
   }
 
-  handler(initCells) {
+  handler = (initCells) => {
     console.log(this);
     if (this.route.length >= settings.pathfinder.minPathLength) {
       this.finishDrawing(initCells);
-      this.controlsButton.removeEventListener('click', this.handler.bind(this));
+      this.controlsButton.removeEventListener('click', this.handlerWithInitPoints);
     } else {
       helpers.displayMessage(textMessages.errors.pathTooShort);
     }
   }
 
   initActions() {
-    const thisPathfinder = this;
-    const initCells = function(e) {
+    // const thisPathfinder = this;
+    console.log('test132');
+    const initCells = (e) => {
       if (e.target.closest(select.pathfinder.element)) {
-        const clickedCell = thisPathfinder.selectCell(e.target.closest(select.pathfinder.element));
-        thisPathfinder.selectPath(clickedCell);
+        const clickedCell = this.selectCell(e.target.closest(select.pathfinder.element));
+        this.selectPath(clickedCell);
       }
     };
-    thisPathfinder.wrapper.addEventListener('click', initCells);
-    thisPathfinder.controlsButton.addEventListener('click', this.handler.bind(this));
+    this.handlerWithInitPoints = () => {
+      this.handler(initCells);
+    }
+    this.wrapper.addEventListener('click', initCells);
+    this.controlsButton.addEventListener('click', this.handlerWithInitPoints);
   }
 
   getElements() {
