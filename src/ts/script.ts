@@ -1,43 +1,8 @@
 import {select, classNames} from './settings.js';
+import {activatePage, appProps, initButtons, initPages, initPathfinder, initReset} from './interfaces';
 import Pathfinder from './components/Pathfinder.js';
 
 declare const AOS: any
-
-interface appProps {
-  [key: string]: Function
-}
-
-interface initPages {
-  navWrapper: HTMLElement;
-  navLinks: NodeListOf<HTMLAnchorElement>;
-  pages: HTMLCollection;
-}
-
-interface activatePage {
-  pages: HTMLCollection;
-  navLinks: NodeListOf<HTMLAnchorElement>;
-}
-
-interface initPathfinder {
-  wrapper: HTMLDivElement;
-  pathfinder: object;
-}
-
-interface initReset {
-  wrapper: HTMLDivElement;
-  pathfinder: object;
-  sideMenuButton: HTMLDivElement;
-  sideMenuControls: HTMLDivElement;
-  sideMenuTitle: HTMLElement;
-}
-
-interface initButtons {
-  rulesButton: HTMLButtonElement;
-  rulesHideButtons: NodeListOf<HTMLButtonElement>;
-  sideMenuButton: HTMLDivElement;
-  sideMenuControls: HTMLDivElement;
-  sideMenuTitle: HTMLElement;
-}
 
 const app: appProps = {
 
