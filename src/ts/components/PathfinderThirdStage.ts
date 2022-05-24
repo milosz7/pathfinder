@@ -1,22 +1,5 @@
 import { classNames, settings, select, textMessages } from '../settings.js';
-
-interface cell {
-  posX: number;
-  posY: number;
-  wrapper: HTMLElement;
-  activeAdjacent: number;
-}
-
-type cellCoordinates = [number, number];
-type coordinateArr = Array<cellCoordinates>;
-
-interface stageBase {
-  elementsInRow: number;
-  coordinateLimitDefault: number;
-  elementsAmount: number;
-  cells: Array<cell>;
-  route: coordinateArr;
-}
+import { cell, stageBase, cellCoordinates, coordinateArr } from '../interfaces'
 
 interface constructorData extends stageBase {
   selectedPoints: coordinateArr;

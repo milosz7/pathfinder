@@ -1,33 +1,17 @@
 import { select, settings, classNames, textMessages } from '../settings.js';
+import { cell, stageBase, cellCoordinates, coordinateArr } from '../interfaces'
 import helpers from '../helpers.js';
 import PathfinderCell from './PathfinderCell.js';
 import PathfinderSecondStage from './PathfinderSecondStage.js';
 
-interface cell {
-  posX: number;
-  posY: number;
-  wrapper: HTMLElement;
-  activeAdjacent: number;
-}
 
-interface stageBase {
-  elementsInRow: number;
-  coordinateLimitDefault: number;
-  elementsAmount: number;
-  cells: Array<cell>;
-  route: coordinateArr;
-  dom: { [key: string]: HTMLElement };
-
-}
 
 interface classProps extends stageBase {
   testPath: coordinateArr;
   elementsInRow: number;
   handlerWithInitCells: Function;
+  dom: { [key: string]: HTMLElement };
 }
-
-type cellCoordinates = [number, number];
-type coordinateArr = Array<cellCoordinates>;
 
 interface Pathfinder extends classProps {}
 

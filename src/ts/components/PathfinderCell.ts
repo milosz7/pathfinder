@@ -1,10 +1,15 @@
 import {classNames} from '../settings.js';
 
-class PathfinderCell {
+interface cellData {
   posX: number
   posY: number;
   wrapper: HTMLElement;
   activeAdjacent: number;
+}
+
+interface PathfinderCell extends cellData {}
+
+class PathfinderCell {
   constructor(wrapper: HTMLElement, posX: number, posY: number) {
     this.wrapper = wrapper;
     this.activeAdjacent = 0;

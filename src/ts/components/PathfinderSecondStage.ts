@@ -1,28 +1,7 @@
 import helpers from '../helpers.js';
 import { select, settings, classNames, textMessages } from '../settings.js';
+import { cell, stageBase, coordinateArr } from '../interfaces'
 import PathfinderThirdStage from './PathfinderThirdStage.js';
-
-interface cell {
-  posX: number;
-  posY: number;
-  wrapper: HTMLElement;
-  activeAdjacent: number;
-}
-
-type cellCoordinates = [number, number];
-type coordinateArr = Array<cellCoordinates>;
-
-interface routes {
-
-}
-
-interface stageBase {
-  elementsInRow: number;
-  coordinateLimitDefault: number;
-  elementsAmount: number;
-  cells: Array<cell>;
-  route: coordinateArr;
-}
 
 interface classProps extends stageBase {
   selectedPoints: coordinateArr;
