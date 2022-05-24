@@ -1,7 +1,45 @@
 import { classNames, settings, select, textMessages } from '../settings.js';
 
+interface cell {
+  posX: number;
+  posY: number;
+  wrapper: HTMLElement;
+  activeAdjacent: number;
+}
+
+type cellCoordinates = [number, number];
+type coordinateArr = Array<cellCoordinates>;
+
+interface stageBase {
+  elementsInRow: number;
+  coordinateLimitDefault: number;
+  elementsAmount: number;
+  cells: Array<cell>;
+  route: coordinateArr;
+}
+
+interface constructorData extends stageBase {
+  selectedPoints: coordinateArr;
+}
+
+interface classProps extends stageBase {
+  selectedPoints: coordinateArr;
+  dom: { [key: string]: HTMLElement };
+  startPoint: cellCoordinates;
+  endPoint: cellCoordinates;
+  shortestPath: coordinateArr;
+  paths: {[key: string]: coordinateArr};
+  initialPathID: number;
+  currentPathIndex: number;
+  sideMenuControls: HTMLCollection;
+}
+
+interface PathfinderThirdStage extends classProps {}
+
 class PathfinderThirdStage {
-  constructor(data) {
+  constructor(data: constructorData) {
+    debugger;
+    this.dom = {};
     this.route = data.route;
     this.startPoint = data.selectedPoints[0];
     this.endPoint = data.selectedPoints[1];
@@ -18,15 +56,15 @@ class PathfinderThirdStage {
   }
 
   getElements() {
-    this.wrapper = document.querySelector(select.containerOf.pathfinder);
-    this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
-    this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
-    this.summary = document.querySelector(select.containerOf.summary);
-    this.sideMenuControls = document.querySelector(select.sideMenu.controls).children;
-    this.sideMenuClickable = document.querySelector(select.sideMenu.button);
+    this.dom.wrapper = document.querySelector(select.containerOf.pathfinder)!;
+    this.dom.controlsButton = document.querySelector(select.pathfinder.controlsButton)!;
+    this.dom.titleMessage = document.querySelector(select.pathfinder.messageTitle)!;
+    this.dom.summary = document.querySelector(select.containerOf.summary)!;
+    this.sideMenuControls = document.querySelector(select.sideMenu.controls)!.children;
+    this.dom.sideMenuClickable = document.querySelector(select.sideMenu.button)!;
   }
 
-  getCell(coordinates) {
+  getCell(coordinates: cellCoordinates) {
     const posX = coordinates[0];
     const posY = coordinates[1];
     return this.cells[posY * this.elementsInRow + posX];
@@ -83,33 +121,33 @@ class PathfinderThirdStage {
     setTimeout(() => {
       this.displaySummary();
     }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length + settings.summary.popupDelay);
-    this.controlsButton.addEventListener('click', () => {
+    this.dom.controlsButton.addEventListener('click', () => {
       const reset = new CustomEvent('reset', {
         bubbles: true,
       });
-      this.controlsButton.textContent = textMessages.pathfinder.drawing.btnText;
-      this.titleMessage.textContent = textMessages.pathfinder.drawing.title;
-      this.controlsButton.replaceWith(this.controlsButton.cloneNode(true));
+      this.dom.controlsButton.textContent = textMessages.pathfinder.drawing.btnText;
+      this.dom.titleMessage.textContent = textMessages.pathfinder.drawing.title;
+      this.dom.controlsButton.replaceWith(this.dom.controlsButton.cloneNode(true));
       for (let button of this.sideMenuControls) {
         button.replaceWith(button.cloneNode(true));
       }
-      this.wrapper.dispatchEvent(reset);
+      this.dom.wrapper.dispatchEvent(reset);
     });
   }
 
   displayShortest() {
     for (let coordinates of this.shortestPath) {
-      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
+      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`)!;
       setTimeout(() => {
         cellToActivate.classList.toggle(classNames.pathfinder.shortest);
       }, settings.pathfinder.cellMarkupDelay * this.shortestPath.indexOf(coordinates));
     }
   }
 
-  switchPath(path) {
+  switchPath(path: coordinateArr) {
     for (let i = 1; i < path.length - 1; i++) {
       const coordinates = path[i];
-      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`);
+      const cellToActivate = document.querySelector(`[pos-x="${coordinates[0]}"][pos-y="${coordinates[1]}"]`)!;
       setTimeout(() => {
         cellToActivate.classList.toggle(classNames.pathfinder.shortest);
       }, settings.pathfinder.cellMarkupDelay * path.indexOf(coordinates));
@@ -117,12 +155,12 @@ class PathfinderThirdStage {
   }
 
   switchPathInit() {
-    const buttonPrev = this.sideMenuControls[0];
-    const buttonNext = this.sideMenuControls[1];
+    const buttonPrev = this.sideMenuControls[0] as HTMLButtonElement;
+    const buttonNext = this.sideMenuControls[1] as HTMLButtonElement;
     const pathKeys = Object.keys(this.paths);
     this.currentPathIndex = 0;
     buttonPrev.addEventListener('click', () => {
-      for (let button of this.sideMenuControls) {
+      for (let button of this.sideMenuControls as unknown as HTMLButtonElement[]) {
         button.disabled = true;
       }
       let oldIndex = this.currentPathIndex;
@@ -137,13 +175,13 @@ class PathfinderThirdStage {
         this.switchPath(this.paths[pathKeys[this.currentPathIndex]]);
       }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length);
       setTimeout(() => {
-        for (let button of this.sideMenuControls) {
+        for (let button of this.sideMenuControls as unknown as HTMLButtonElement[]) {
           button.disabled = false;
         }
       }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length * 2);
     });
     buttonNext.addEventListener('click', () => {
-      for (let button of this.sideMenuControls) {
+      for (let button of this.sideMenuControls as unknown as HTMLButtonElement[]) {
         button.disabled = true;
       }
       let oldIndex = this.currentPathIndex;
@@ -158,7 +196,7 @@ class PathfinderThirdStage {
         this.switchPath(this.paths[pathKeys[this.currentPathIndex]]);
       }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length);
       setTimeout(() => {
-        for (let button of this.sideMenuControls) {
+        for (let button of this.sideMenuControls as unknown as HTMLButtonElement[]) {
           button.disabled = false;
         }
       }, settings.pathfinder.cellMarkupDelay * this.shortestPath.length * 2);
@@ -167,17 +205,17 @@ class PathfinderThirdStage {
 
   displaySummary() {
     document.body.classList.add(classNames.page.blur);
-    this.summary.classList.add(classNames.summary.active);
-    const routeOutput = this.summary.querySelector(select.summary.routeLength);
-    const pathsNumberOutput = this.summary.querySelector(select.summary.pathsNumber);
-    const routeShortestOutput = this.summary.querySelector(select.summary.routeShortest);
-    routeOutput.innerHTML = this.route.length;
-    pathsNumberOutput.innerHTML = Object.keys(this.paths).length;
-    routeShortestOutput.innerHTML = this.shortestPath.length;
-    this.sideMenuClickable.classList.toggle(classNames.sideNav.display, Object.keys(this.paths).length > 1);
+    this.dom.summary.classList.add(classNames.summary.active);
+    const routeOutput = this.dom.summary.querySelector(select.summary.routeLength)!;
+    const pathsNumberOutput = this.dom.summary.querySelector(select.summary.pathsNumber)!;
+    const routeShortestOutput = this.dom.summary.querySelector(select.summary.routeShortest)!;
+    routeOutput.innerHTML = this.route.length.toString();
+    pathsNumberOutput.innerHTML = Object.keys(this.paths).length.toString();
+    routeShortestOutput.innerHTML = this.shortestPath.length.toString();
+    this.dom.sideMenuClickable.classList.toggle(classNames.sideNav.display, Object.keys(this.paths).length > 1);
   }
 
-  checkPaths(endPointX, endPointY) {
+  checkPaths(endPointX: number, endPointY: number) {
     let finishedPaths = 0;
     let unfinishedPaths = 0;
     for (let path in this.paths) {
@@ -190,7 +228,7 @@ class PathfinderThirdStage {
     return [finishedPaths, unfinishedPaths];
   }
 
-  testSplit(reducedAdjacent) {
+  testSplit(reducedAdjacent: coordinateArr) {
     for (let coordinates of reducedAdjacent) {
       const cellToCheck = this.getCell(coordinates);
       if (cellToCheck.activeAdjacent <= 2) {
@@ -200,8 +238,8 @@ class PathfinderThirdStage {
     return true;
   }
 
-  reduceAdjacent(adjacentCells, pathArr) {
-    const reducedAdjacent = adjacentCells.reduce((uniqueCoordinates, coordinateToCheck) => {
+  reduceAdjacent(adjacentCells: coordinateArr, pathArr: coordinateArr) {
+    const reducedAdjacent: coordinateArr = adjacentCells.reduce((uniqueCoordinates: coordinateArr, coordinateToCheck: cellCoordinates) => {
       if(!this.testIndex(coordinateToCheck[0], coordinateToCheck[1], pathArr))  {
         uniqueCoordinates.push(coordinateToCheck); 
       }
@@ -210,7 +248,7 @@ class PathfinderThirdStage {
     return reducedAdjacent;
   }
 
-  propagatePath(pathName, pathArr) { 
+  propagatePath(pathName: string, pathArr: coordinateArr) { 
     const pointToCheck = pathArr[pathArr.length - 1];
     const cellToCheck = this.getCell(pointToCheck);
     let pathBeforeSplit = JSON.parse(JSON.stringify(pathArr));
@@ -218,7 +256,7 @@ class PathfinderThirdStage {
     const reducedAdjacent = this.reduceAdjacent(adjacentCells, pathArr);
 
     if (reducedAdjacent.length > 1 && this.testSplit(reducedAdjacent)) {
-      const distancesFromEnd = [];
+      const distancesFromEnd: number[] = [];
       for (let coordinates of reducedAdjacent) {
         const distance = Math.abs(coordinates[0] - this.endPoint[0]) + Math.abs(coordinates[1] - this.endPoint[1]);
         distancesFromEnd.push(distance);
@@ -268,7 +306,7 @@ class PathfinderThirdStage {
     }  
   }
 
-  testIndex(posX, posY, path) {
+  testIndex(posX: number, posY: number, path: coordinateArr) {
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
         return true;
@@ -277,8 +315,8 @@ class PathfinderThirdStage {
     return false;
   }
 
-  getAdjacent(cell) {
-    const adjacentCells = [];
+  getAdjacent(cell: cell) {
+    const adjacentCells: coordinateArr = [];
     const posX = cell.posX;
     const posY = cell.posY;
     if (this.testIndex(posX - 1, posY, this.route)) {

@@ -3,14 +3,42 @@ import helpers from '../helpers.js';
 import PathfinderCell from './PathfinderCell.js';
 import PathfinderSecondStage from './PathfinderSecondStage.js';
 
+interface cell {
+  posX: number;
+  posY: number;
+  wrapper: HTMLElement;
+  activeAdjacent: number;
+}
+
+interface stageBase {
+  elementsInRow: number;
+  coordinateLimitDefault: number;
+  elementsAmount: number;
+  cells: Array<cell>;
+  route: coordinateArr;
+  dom: { [key: string]: HTMLElement };
+
+}
+
+interface classProps extends stageBase {
+  testPath: coordinateArr;
+  elementsInRow: number;
+  handlerWithInitCells: Function;
+}
+
+type cellCoordinates = [number, number];
+type coordinateArr = Array<cellCoordinates>;
+
+interface Pathfinder extends classProps {}
+
 class Pathfinder {
-  constructor(wrapper) {
-    this.wrapper = wrapper;
+  constructor(wrapper: HTMLElement) {
     this.cells = [];
     this.route = [];
+    this.dom = {};
+    this.getElements(wrapper);
     this.decideCellsAmount();
     this.createElements();
-    this.getElements();
     this.initActions();
   }
 
@@ -40,14 +68,13 @@ class Pathfinder {
       } else {
         posX++;
       }
-      this.wrapper.appendChild(gridElement);
+      this.dom.wrapper.appendChild(gridElement);
     }
   }
 
-  selectPath(cell) {
-    const clickedCoordinates = [];
-    this.generateElemData(cell, cell.posX, cell.posY);
-    clickedCoordinates.push(cell.posX, cell.posY);
+  selectPath(cell: cell) {
+    const clickedCoordinates: cellCoordinates = [cell.posX, cell.posY];
+    this.generateElemData(cell);
     cell.wrapper.classList.toggle(
       classNames.pathfinder.active,
       this.toggleStatus(clickedCoordinates, cell)
@@ -55,7 +82,7 @@ class Pathfinder {
     this.markClickable();
   }
 
-  toggleStatus(coordinates, cell) {
+  toggleStatus(coordinates: cellCoordinates, cell: cell) {
     const path = this.route;
     const posX = cell.posX;
     const posY = cell.posY;
@@ -72,53 +99,52 @@ class Pathfinder {
         return true;
       }
     } else {
-      const testPath = (this.testPath = []);
+      this.testPath = [];
       const routeID = settings.pathfinder.routeID;
       const testPathID = settings.pathfinder.testPathID;
       const notIncluded = !this.testIndex(coordinates[0], coordinates[1], testPathID);
-      path.splice(this.getIndex(posX, posY, routeID), 1);  
+      const cellToUnstageIdx = this.getIndex(posX, posY, routeID);
+      if (typeof cellToUnstageIdx === 'number') {
+        path.splice(cellToUnstageIdx, 1);
+      }
       for (let coordinates of path) {
-        if (testPath.length === 0) {
-          testPath.push(coordinates);
+        if (this.testPath.length === 0) {
+          this.testPath.push(coordinates);
         } else if (
-          (notIncluded &&
-            this.testIndex(coordinates[0] + 1, coordinates[1], testPathID)) ||
-          (notIncluded &&
-            this.testIndex(coordinates[0]  - 1, coordinates[1], testPathID)) ||
-          (notIncluded &&
-            this.testIndex(coordinates[0] , coordinates[1] + 1, testPathID)) ||
-          (notIncluded &&
-            this.testIndex(coordinates[0] , coordinates[1] - 1, testPathID))
+          (notIncluded && this.testIndex(coordinates[0] + 1, coordinates[1], testPathID)) ||
+          (notIncluded && this.testIndex(coordinates[0] - 1, coordinates[1], testPathID)) ||
+          (notIncluded && this.testIndex(coordinates[0], coordinates[1] + 1, testPathID)) ||
+          (notIncluded && this.testIndex(coordinates[0], coordinates[1] - 1, testPathID))
         ) {
-          testPath.push(coordinates);
+          this.testPath.push(coordinates);
         }
-        for (let coordinates of testPath) {
+        for (let coordinates of this.testPath) {
           if (
             this.testIndex(coordinates[0] + 1, coordinates[1], routeID) &&
             !this.testIndex(coordinates[0] + 1, coordinates[1], testPathID)
           ) {
-            testPath.push([coordinates[0] + 1, coordinates[1]]);
+            this.testPath.push([coordinates[0] + 1, coordinates[1]]);
           }
           if (
             this.testIndex(coordinates[0] - 1, coordinates[1], routeID) &&
             !this.testIndex(coordinates[0] - 1, coordinates[1], testPathID)
           ) {
-            testPath.push([coordinates[0] - 1, coordinates[1]]);
+            this.testPath.push([coordinates[0] - 1, coordinates[1]]);
           }
           if (
             this.testIndex(coordinates[0], coordinates[1] + 1, routeID) &&
             !this.testIndex(coordinates[0], coordinates[1] + 1, testPathID)
           ) {
-            testPath.push([coordinates[0], coordinates[1] + 1]);
+            this.testPath.push([coordinates[0], coordinates[1] + 1]);
           }
           if (
             this.testIndex(coordinates[0], coordinates[1] - 1, routeID) &&
             !this.testIndex(coordinates[0], coordinates[1] - 1, testPathID)
           ) {
-            testPath.push([coordinates[0], coordinates[1] - 1]);
+            this.testPath.push([coordinates[0], coordinates[1] - 1]);
           }
         }
-        if (testPath.length === path.length) {
+        if (this.testPath.length === path.length) {
           return false;
         } else {
           path.push([posX, posY]);
@@ -131,7 +157,7 @@ class Pathfinder {
 
   markClickable() {
     for (let cell of this.cells) {
-      this.generateElemData(cell, cell.posX, cell.posY);
+      this.generateElemData(cell);
       if (cell.activeAdjacent > 0) {
         cell.wrapper.classList.toggle(
           classNames.pathfinder.clickable,
@@ -143,8 +169,9 @@ class Pathfinder {
     }
   }
 
-  getIndex(posX, posY, pathArr) {
-    const path = this[pathArr];
+  
+  getIndex(posX: number, posY: number, pathArr: keyof Pathfinder) {
+    const path = this[pathArr] as coordinateArr;
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
         return path.indexOf(routeCoordinates);
@@ -152,8 +179,8 @@ class Pathfinder {
     }
   }
 
-  testIndex(posX, posY, pathArr) {
-    const path = this[pathArr];
+  testIndex(posX: number, posY: number, pathArr: keyof Pathfinder) {
+    const path = this[pathArr] as coordinateArr;
     for (let routeCoordinates of path) {
       if (routeCoordinates[0] === posX && routeCoordinates[1] === posY) {
         return true;
@@ -162,18 +189,18 @@ class Pathfinder {
     return false;
   }
 
-  generateElemData(cell, posX, posY) {
+  generateElemData(cell: cell) {
     cell.activeAdjacent = 0;
-    const adjacencySelectors = {
-      top: `[pos-x="${posX}"][pos-y="${posY - 1}"]`,
-      left: `[pos-x="${posX - 1}"][pos-y="${posY}"]`,
-      bottom: `[pos-x="${posX}"][pos-y="${posY + 1}"]`,
-      right: `[pos-x="${posX + 1}"][pos-y="${posY}"]`,
+    const adjacencySelectors: {[key: string]: string} = {
+      top: `[pos-x="${cell.posX}"][pos-y="${cell.posY - 1}"]`,
+      left: `[pos-x="${cell.posX - 1}"][pos-y="${cell.posY}"]`,
+      bottom: `[pos-x="${cell.posX}"][pos-y="${cell.posY + 1}"]`,
+      right: `[pos-x="${cell.posX + 1}"][pos-y="${cell.posY}"]`,
     };
     for (let selector in adjacencySelectors) {
-      const selectedElement = this.wrapper.querySelector(adjacencySelectors[selector]);
+      const selectedElement = this.dom.wrapper.querySelector(adjacencySelectors[selector]);
       if (
-        selectedElement !== null &&
+        selectedElement &&
         selectedElement.classList.contains(classNames.pathfinder.active)
       ) {
         cell.activeAdjacent++;
@@ -181,58 +208,65 @@ class Pathfinder {
     }
   }
 
-  selectCell(element) {
-    const posX = parseInt(element.getAttribute('pos-x'), 10);
-    const posY = parseInt(element.getAttribute('pos-y'), 10);
+  selectCell(element: HTMLElement) {
+    const posX = parseInt(element.getAttribute('pos-x')!, 10);
+    const posY = parseInt(element.getAttribute('pos-y')!, 10);
     return this.cells[posY * this.elementsInRow + posX];
   }
 
-  handler = (initCells) => {
+  handler = (initCells: Function) => {
     if (this.route.length >= settings.pathfinder.minPathLength) {
       this.finishDrawing(initCells);
-      this.controlsButton.removeEventListener('click', this.handlerWithInitCells);
+      this.dom.controlsButton.removeEventListener(
+        'click',
+        this.handlerWithInitCells as EventListener
+      );
     } else {
       helpers.displayMessage(textMessages.errors.pathTooShort);
     }
   };
 
   initActions() {
-    const initCells = (e) => {
-      if (e.target.closest(select.pathfinder.element)) {
-        const clickedCell = this.selectCell(e.target.closest(select.pathfinder.element));
+    const initCells = (e: MouseEvent) => {
+      const target = e.target as Element;
+      if (target.closest(select.pathfinder.element)) {
+        const clickedCell = this.selectCell(target.closest(select.pathfinder.element)!);
         this.selectPath(clickedCell);
       }
     };
     this.handlerWithInitCells = () => {
       this.handler(initCells);
     };
-    this.wrapper.addEventListener('click', initCells);
-    this.controlsButton.addEventListener('click', this.handlerWithInitCells);
+    this.dom.wrapper.addEventListener('click', initCells);
+    this.dom.controlsButton.addEventListener('click', this.handlerWithInitCells as EventListener);
   }
 
-  getElements() {
-    this.container = document.querySelector(select.containerOf.finder);
-    this.controlsButton = document.querySelector(select.pathfinder.controlsButton);
-    this.titleMessage = document.querySelector(select.pathfinder.messageTitle);
+  getElements(wrapper: HTMLElement) {
+    this.dom.wrapper = wrapper;
+    this.dom.container = document.querySelector(select.containerOf.finder)!;
+    this.dom.controlsButton = document.querySelector(select.pathfinder.controlsButton)!;
+    this.dom.titleMessage = document.querySelector(select.pathfinder.messageTitle)!;
   }
 
-  finishDrawing(functionToRemove) {
+  finishDrawing(functionToRemove: Function) {
     const pathfinderData = {
       route: this.route,
       cells: this.cells,
       elementsInRow: this.elementsInRow,
       coordinateLimitDefault: this.coordinateLimitDefault,
       elementsAmount: this.elementsAmount,
+      wrapper: this.dom.wrapper,
+      dom: this.dom,
     };
     for (let cell of this.cells) {
-      this.generateElemData(cell, cell.posX, cell.posY);
+      this.generateElemData(cell);
       if (cell.wrapper.classList.contains(classNames.pathfinder.clickable)) {
         cell.wrapper.classList.remove(classNames.pathfinder.clickable);
       }
     }
-    this.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
-    this.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
-    this.wrapper.removeEventListener('click', functionToRemove);
+    this.dom.controlsButton.innerHTML = textMessages.pathfinder.pickCells.btnText;
+    this.dom.titleMessage.innerHTML = textMessages.pathfinder.pickCells.title;
+    this.dom.wrapper.removeEventListener('click', functionToRemove as EventListener);
     new PathfinderSecondStage(pathfinderData);
   }
 }
