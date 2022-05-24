@@ -1,5 +1,3 @@
-
-
 export const select = {
   containerOf: {
     nav: '.nav',
@@ -29,6 +27,8 @@ export const select = {
   sideMenu: {
     button: '.side-nav',
     controls: '.side-nav .buttons-box',
+    buttonPrev: '.prev',
+    buttonNext: '.next',
     title: '.side-nav__title',
     arrow: '.side-nav__arrow',
   },
@@ -80,9 +80,9 @@ export const settings = {
     elementsAmountDefault: 100,
     coordinateLimitDefault: 9,
     elementsInRow: 10,
-    testPathID: 'testPath',
-    routeID: 'route',
-    selectedPoints: 'selectedPoints',
+    testPathID: 'testPath' as const,
+    routeID: 'route' as const,
+    selectedPoints: 'selectedPoints' as const,
     minPathLength: 3,
     maxPointNumber: 2,
     pathGenerationLimit: 10,

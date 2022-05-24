@@ -2,9 +2,9 @@ import { select, classNames, settings } from './settings.js';
 
 const helpers = {
   
-  displayMessage: function(msg) {
-    const messageBox = document.querySelector(select.containerOf.messageBox);
-    const messageText = messageBox.querySelector(select.messageBox.text);
+  displayMessage: function(msg: string) {
+    const messageBox = document.querySelector(select.containerOf.messageBox)!;
+    const messageText = messageBox.querySelector(select.messageBox.text)!;
     messageText.innerHTML = msg;
     if (!messageBox.classList.contains(classNames.messageBox.active)) {
       messageBox.classList.toggle(classNames.messageBox.active);

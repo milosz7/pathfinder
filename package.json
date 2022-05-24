@@ -9,22 +9,23 @@
         "init:files": "touch README.md src/index.html src/sass/style.scss src/js/script.js src/db/app.json",
         "init:gitignore": "curl https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore -o .gitignore",
         "init:gitignore:custom": "echo \"dist\" >> .gitignore",
-        "init:db": "echo {} >> src/db/app.json",
         "test": "npm-run-all test:*",
         "test:html": "html-validate src/*.html",
-        "test:js": "eslint --fix src/js/",
         "test:scss": "stylelint --fix src/sass/",
         "build": "npm-run-all build:* test",
         "build:clean": "rimraf dist && mkdirp dist",
-        "build:copy": "copyfiles -a -u 1 -e \"**/sass/**/*\" -e \"**/.gitkeep\" \"src/**/*\" dist",
+        "build:copy": "copyfiles -a -u 1  -e \"**/ts/**/*\" -e \"**/sass/**/*\" -e \"**/.gitkeep\" \"src/**/*\" dist",
         "build:sass": "sass src/sass:dist/css ",
+        "build:ts": "tsc",
         "build:autoprefixer": "postcss dist/css/*.css --use autoprefixer -d dist/css",
-        "build-dev": "npm-run-all build-dev:sass build:autoprefixer",
+        "build-dev": "npm-run-all build-dev:sass build:autoprefixer build-dev:ts",
         "build-dev:sass": "sass src/sass:dist/css",
+        "build-dev:ts": "tsc",
         "watch": "npm-run-all build build-dev -p watch:*",
         "watch:browsersync": "browser-sync start --server dist --files \"dist/**/*\"",
         "watch:sassprefixer": "onchange \"src/sass/**/*.scss\" -- npm run build-dev",
-        "watch:copy": "onchange -e \"**/sass/**/*\" -e \"**/.gitkeep\" \"src/**/*\" -- copyfiles -a -u 1 {{changed}} dist"
+        "watch:ts": "onchange \"src/ts/**/*.ts\" -- npm run build-dev",
+        "watch:copy": "onchange -e \"**/sass/**/*\" -e \"**/ts/**/*\" -e \"**/.gitkeep\" \"src/**/*\" -- copyfiles -a -u 1 {{changed}} dist"
     },
     "keywords": [],
     "author": "",
@@ -47,6 +48,7 @@
     },
     "dependencies": {
         "http-server": "^14.1.0",
-        "sass": "^1.35.1"
+        "sass": "^1.35.1",
+        "typescript": "^4.6.4"
     }
 }
